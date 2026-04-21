@@ -21,7 +21,7 @@ Este projeto é um sistema de gerenciamento de agendamentos para barbearias, des
 ---
 
 ## 📝 Sobre o Projeto
-[cite_start]O sistema tem como objetivo facilitar a gestão de uma barbearia, permitindo que administradores e barbeiros gerenciem fluxos de atendimento, enquanto garantem a integridade dos dados através de um SGBD relacional[cite: 8, 10].
+O sistema tem como objetivo facilitar a gestão de uma barbearia, permitindo que administradores e barbeiros gerenciem fluxos de atendimento, enquanto garantem a integridade dos dados através de um SGBD relacional.
 
 ## ✨ Funcionalidades (CRUD)
 O sistema contempla todos os requisitos obrigatórios do edital:
