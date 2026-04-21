@@ -5,7 +5,7 @@
 ![PostgreSQL](https://img.shields.io/badge/postgresql-%23336791.svg?style=for-the-badge&logo=postgresql&logoColor=white)
 ![Status](https://img.shields.io/badge/Status-Em%20Desenvolvimento-yellow?style=for-the-badge)
 
-Este projeto é um sistema de gerenciamento de agendamentos para barbearias, desenvolvido para a disciplina de **Banco de Dados** (2ª Nota) sob orientação do **Prof. [cite_start]Anderson Costa**[cite: 1, 3]. A aplicação integra uma interface web moderna com um banco de dados relacional robusto para controle de clientes, serviços e horários.
+Este projeto é um sistema de gerenciamento de agendamentos para barbearias, desenvolvido para a disciplina de **Banco de Dados** (2ª Nota) sob orientação do **Prof. Anderson Costa**. A aplicação integra uma interface web moderna com um banco de dados relacional robusto para controle de clientes, serviços e horários.
 
 ---
 
