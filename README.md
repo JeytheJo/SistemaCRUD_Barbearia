@@ -24,16 +24,16 @@ Este projeto é um sistema de gerenciamento de agendamentos para barbearias, des
 [cite_start]O sistema tem como objetivo facilitar a gestão de uma barbearia, permitindo que administradores e barbeiros gerenciem fluxos de atendimento, enquanto garantem a integridade dos dados através de um SGBD relacional[cite: 8, 10].
 
 ## ✨ Funcionalidades (CRUD)
-[cite_start]O sistema contempla todos os requisitos obrigatórios do edital[cite: 21]:
-- [cite_start]**Autenticação:** Tela de login segura para acesso ao sistema[cite: 19].
-- [cite_start]**Cadastro (Insert):** Inclusão de usuários, serviços e agendamentos[cite: 22].
-- [cite_start]**Consulta (Select):** Listagem dinâmica com filtros e ordenação[cite: 25, 26].
-- [cite_start]**Atualização (Update):** Edição de informações de registros existentes[cite: 23].
-- [cite_start]**Exclusão (Delete):** Remoção de dados do sistema[cite: 24].
-- [cite_start]**Relatórios:** Consultas complexas utilizando **INNER JOIN** e **LEFT JOIN**[cite: 27].
+O sistema contempla todos os requisitos obrigatórios do edital:
+- **Autenticação:** Tela de login segura para acesso ao sistema.
+- **Cadastro (Insert):** Inclusão de usuários, serviços e agendamentos.
+- **Consulta (Select):** Listagem dinâmica com filtros e ordenação.
+- **Atualização (Update):** Edição de informações de registros existentes.
+- **Exclusão (Delete):** Remoção de dados do sistema.
+- **Relatórios:** Consultas complexas utilizando **INNER JOIN** e **LEFT JOIN**.
 
 ## 🗄️ Modelagem do Banco
-[cite_start]O banco de dados foi modelado no **PostgreSQL** e possui 3 tabelas principais relacionadas[cite: 12, 41]:
+O banco de dados foi modelado no **PostgreSQL** e possui 3 tabelas principais relacionadas:
 - `usuarios`: Cadastro de clientes, barbeiros e admins.
 - `servicos`: Tabela de procedimentos oferecidos.
 - `agendamentos`: Tabela central que conecta clientes, barbeiros e serviços.
@@ -44,15 +44,15 @@ Este projeto é um sistema de gerenciamento de agendamentos para barbearias, des
 ---
 
 ## 📁 Estrutura do Repositório
-[cite_start]Conforme exigido nas normas do trabalho, o projeto está organizado da seguinte forma[cite: 32]:
+Conforme exigido nas normas do trabalho, o projeto está organizado da seguinte forma:
 
 | Pasta | Descrição |
 | :--- | :--- |
-| `/diagrama` | [cite_start]Imagem ou PDF do Diagrama Entidade-Relacionamento (DER)[cite: 33]. |
-| `/ddl` | [cite_start]Script SQL de criação das tabelas e restrições (Primary/Foreign Keys)[cite: 34]. |
-| `/dml` | [cite_start]Scripts SQL com exemplos de inserção (população de dados)[cite: 35]. |
-| `/dql` | [cite_start]Scripts SQL com as consultas realizadas (Selects, Joins, Filtros)[cite: 36]. |
-| `/src` | [cite_start]Código-fonte da aplicação desenvolvido em Python/Flask[cite: 37]. |
+| `/diagrama` | Imagem ou PDF do Diagrama Entidade-Relacionamento (DER). |
+| `/ddl` | Script SQL de criação das tabelas e restrições (Primary/Foreign Keys). |
+| `/dml` | Scripts SQL com exemplos de inserção (população de dados). |
+| `/dql` | Scripts SQL com as consultas realizadas (Selects, Joins, Filtros). |
+| `/src` | Código-fonte da aplicação desenvolvido em Python/Flask. |
 
 ---
 
