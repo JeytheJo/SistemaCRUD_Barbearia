@@ -1,0 +1,160 @@
+
+@import url('https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Share+Tech+Mono&display=swap');
+
+:root {
+  --preto:       #0a0a0a;
+  --preto-verm:  #110305;
+  --verm-escuro: #6b0000;
+  --verm-acento: #cc0000;
+  --texto:       #e0e0e0;
+  --texto-muted: #666;
+  --borda:       #2a2a2a;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--preto);
+  color: var(--texto);
+  font-family: 'Share Tech Mono', monospace;
+  min-height: 100vh;
+}
+
+
+.auth-page {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  min-height: 100vh;
+  background: radial-gradient(ellipse at 20% 50%, #2a0000 0%, var(--preto) 60%);
+}
+
+/* Efeito dithering via SVG filter + pattern */
+.dither-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background-image:
+    radial-gradient(circle, #8b000022 1px, transparent 1px),
+    radial-gradient(circle, #8b000011 1px, transparent 1px);
+  background-size: 4px 4px, 8px 8px;
+  background-position: 0 0, 2px 2px;
+  pointer-events: none;
+}
+
+/* BRAND (canto superior esquerdo)
+*/
+.brand {
+  position: fixed;
+  top: 24px;
+  left: 28px;
+  z-index: 10;
+  line-height: 1;
+}
+
+.brand-title {
+  font-family: 'UnifrakturMaguntia', cursive;
+  font-size: 2.2rem;
+  color: var(--texto);
+  font-weight: 400;
+  letter-spacing: 1px;
+}
+
+.brand-sub {
+  display: block;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--texto-muted);
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+/* AUTH BOX*/
+.auth-box {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  width: 340px;
+  margin-right: 10%;
+}
+
+.auth-title {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 1.1rem;
+  letter-spacing: 6px;
+  color: var(--texto);
+  font-weight: 400;
+  margin-bottom: 8px;
+}
+
+.auth-erro {
+  color: var(--verm-acento);
+  font-size: 0.8rem;
+  letter-spacing: 2px;
+  text-align: center;
+}
+
+/* INPUTS*/
+.auth-input {
+  width: 100%;
+  background: transparent;
+  border: 1px solid var(--borda);
+  color: var(--texto);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.78rem;
+  letter-spacing: 2px;
+  padding: 14px 16px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.auth-input::placeholder {
+  color: var(--texto-muted);
+  letter-spacing: 2px;
+}
+
+.auth-input:focus {
+  border-color: var(--verm-escuro);
+}
+
+/* BOTÃO */
+.auth-btn {
+  width: 100%;
+  background: var(--verm-acento);
+  color: var(--texto);
+  border: none;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.82rem;
+  letter-spacing: 4px;
+  padding: 14px;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-top: 4px;
+}
+
+.auth-btn:hover {
+  background: var(--verm-escuro);
+}
+
+
+.auth-link {
+  color: var(--texto-muted);
+  font-size: 0.72rem;
+  letter-spacing: 3px;
+  text-decoration: none;
+  margin-top: 4px;
+  transition: color 0.2s;
+}
+
+.auth-link:hover {
+  color: var(--texto);
+}
