@@ -5,11 +5,9 @@ import hashlib
 app = Flask(__name__)
 app.secret_key = "bodies_barber_secret_123"
 
-# --- Utilidade ---
 def hash_senha(senha):
     return hashlib.sha256(senha.encode()).hexdigest()
 
-# --- Rotas de autenticação ---
 @app.route("/")
 def index():
     return redirect(url_for("login"))
@@ -38,6 +36,31 @@ def login():
 def logout():
     session.clear()
     return redirect(url_for("login"))
+
+@app.route("/cadastro", methods=["GET", "POST"])
+def cadastro():
+    erro = None
+    sucesso = None
+    if request.method == "POST":
+        nome = request.form["nome"]
+        email = request.form["email"]
+        senha = hash_senha(request.form["senha"])
+        telefone = request.form.get("telefone", "")
+        existente = query(
+            "SELECT id FROM usuarios WHERE email = %s",
+            (email,),
+            fetch="one"
+        )
+        if existente:
+            erro = "E-mail já cadastrado."
+        else:
+            query(
+                """INSERT INTO usuarios (nome, email, senha_hash, role, telefone)
+                   VALUES (%s, %s, %s, 'cliente', %s)""",
+                (nome, email, senha, telefone)
+            )
+            sucesso = "Conta criada! Faça o login."
+    return render_template("cadastro.html", erro=erro, sucesso=sucesso)
 
 @app.route("/dashboard")
 def dashboard():

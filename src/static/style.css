@@ -158,3 +158,10 @@ body {
 .auth-link:hover {
   color: var(--texto);
 }
+
+.auth-sucesso {
+  color: #4caf50;
+  font-size: 0.8rem;
+  letter-spacing: 2px;
+  text-align: center;
+}
