@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Bodies Barber — Agendamentos</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
+</head>
+<body class="dash-page">
+
+  <div class="dither-bg"></div>
+
+  <header class="dash-header">
+    <div class="brand">
+      <h1 class="brand-title">Bodies</h1>
+      <span class="brand-sub">Barber</span>
+    </div>
+    <div class="dash-user">
+      <span class="dash-user-nome">{{ session["usuario_nome"] }}</span>
+      <a href="/dashboard" class="dash-logout">VOLTAR</a>
+      <a href="/logout" class="dash-logout">SAIR</a>
+    </div>
+  </header>
+
+  <main class="dash-main">
+    <h2 class="dash-title">AGENDAMENTOS</h2>
+
+    <!-- FORMULÁRIO NOVO AGENDAMENTO -->
+    <section class="crud-section">
+      <h3 class="crud-section-title">NOVO AGENDAMENTO</h3>
+      <form method="POST" action="/agendamentos/novo" class="crud-form">
+
+        <div class="form-row">
+          <select class="auth-input" name="cliente_id" required>
+            <option value="">CLIENTE</option>
+            {% for c in clientes %}
+              <option value="{{ c.id }}">{{ c.nome }}</option>
+            {% endfor %}
+          </select>
+
+          <select class="auth-input" name="barbeiro_id" required>
+            <option value="">BARBEIRO</option>
+            {% for b in barbeiros %}
+              <option value="{{ b.id }}">{{ b.nome }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="form-row">
+          <select class="auth-input" name="servico_id" required>
+            <option value="">SERVIÇO</option>
+            {% for s in servicos %}
+              <option value="{{ s.id }}">{{ s.nome }} — R$ {{ s.preco }}</option>
+            {% endfor %}
+          </select>
+
+          <input class="auth-input" type="datetime-local" name="data_hora" required/>
+        </div>
+
+        <textarea 
+          class="auth-input" 
+          name="observacoes" 
+          placeholder="OBSERVAÇÕES (OPCIONAL)"
+          rows="2"
+        ></textarea>
+
+        <button class="auth-btn" type="submit">AGENDAR</button>
+      </form>
+    </section>
+
+    <!-- FILTROS -->
+    <section class="crud-section">
+      <h3 class="crud-section-title">FILTRAR</h3>
+      <div class="filter-row">
+        <input class="auth-input filter-input" type="text" id="filtro-cliente" placeholder="BUSCAR CLIENTE..."/>
+        <select class="auth-input filter-input" id="filtro-status">
+          <option value="">TODOS OS STATUS</option>
+          <option value="pendente">PENDENTE</option>
+          <option value="confirmado">CONFIRMADO</option>
+          <option value="concluido">CONCLUÍDO</option>
+          <option value="cancelado">CANCELADO</option>
+        </select>
+      </div>
+    </section>
+
+    <!-- TABELA -->
+    <section class="crud-section">
+      <h3 class="crud-section-title">REGISTROS</h3>
+      {% if agendamentos %}
+      <table class="crud-table" id="tabela-agendamentos">
+        <thead>
+          <tr>
+            <th>CLIENTE</th>
+            <th>BARBEIRO</th>
+            <th>SERVIÇO</th>
+            <th>DATA/HORA</th>
+            <th>STATUS</th>
+            <th>AÇÕES</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for a in agendamentos %}
+          <tr data-cliente="{{ a.cliente_nome }}" data-status="{{ a.status }}">
+            <td>{{ a.cliente_nome }}</td>
+            <td>{{ a.barbeiro_nome }}</td>
+            <td>{{ a.servico_nome }}</td>
+            <td>{{ a.data_hora.strftime('%d/%m/%Y %H:%M') }}</td>
+            <td>
+              <span class="status-badge status-{{ a.status }}">
+                {{ a.status.upper() }}
+              </span>
+            </td>
+            <td class="acoes">
+              <!-- Atualizar status -->
+              <form method="POST" action="/agendamentos/status/{{ a.id }}" class="inline-form">
+                <select class="input-mini" name="status">
+                  <option value="pendente">PENDENTE</option>
+                  <option value="confirmado">CONFIRMADO</option>
+                  <option value="concluido">CONCLUÍDO</option>
+                  <option value="cancelado">CANCELADO</option>
+                </select>
+                <button class="btn-mini btn-confirm" type="submit">✓</button>
+              </form>
+              <!-- Deletar -->
+              <form method="POST" action="/agendamentos/deletar/{{ a.id }}" class="inline-form">
+                <button class="btn-mini btn-danger" type="submit"
+                  onclick="return confirm('Deletar agendamento?')">✕</button>
+              </form>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+        <p class="crud-vazio">NENHUM AGENDAMENTO CADASTRADO.</p>
+      {% endif %}
+    </section>
+  </main>
+
+  <script>
+    // Filtro client-side
+    const inputCliente = document.getElementById('filtro-cliente');
+    const selectStatus = document.getElementById('filtro-status');
+    const tabela = document.getElementById('tabela-agendamentos');
+
+    function filtrar() {
+      if (!tabela) return;
+      const cliente = inputCliente.value.toLowerCase();
+      const status = selectStatus.value;
+      tabela.querySelectorAll('tbody tr').forEach(tr => {
+        const nomeCliente = tr.dataset.cliente.toLowerCase();
+        const statusRow = tr.dataset.status;
+        const okCliente = nomeCliente.includes(cliente);
+        const okStatus = status === '' || statusRow === status;
+        tr.style.display = okCliente && okStatus ? '' : 'none';
+      });
+    }
+
+    inputCliente.addEventListener('input', filtrar);
+    selectStatus.addEventListener('change', filtrar);
+  </script>
+
+</body>
+</html>

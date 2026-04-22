@@ -68,5 +68,87 @@ def dashboard():
         return redirect(url_for("login"))
     return render_template("dashboard.html", usuario=session["usuario_nome"])
 
+# --- Agendamentos ---
+@app.route("/agendamentos")
+def agendamentos():
+    if "usuario_id" not in session:
+        return redirect(url_for("login"))
+
+    # INNER JOIN — só agendamentos com cliente, barbeiro e serviço válidos
+    registros = query("""
+        SELECT 
+            a.id,
+            a.data_hora,
+            a.status,
+            a.observacoes,
+            c.nome AS cliente_nome,
+            b.nome AS barbeiro_nome,
+            s.nome AS servico_nome,
+            s.preco
+        FROM agendamentos a
+        INNER JOIN usuarios c ON c.id = a.cliente_id
+        INNER JOIN usuarios b ON b.id = a.barbeiro_id
+        INNER JOIN servicos s ON s.id = a.servico_id
+        ORDER BY a.data_hora DESC
+    """, fetch="all")
+
+    barbeiros = query("""
+        SELECT id, nome FROM usuarios 
+        WHERE role = 'barbeiro' 
+        ORDER BY nome
+    """, fetch="all")
+
+    servicos = query("""
+        SELECT id, nome, preco FROM servicos 
+        WHERE ativo = TRUE 
+        ORDER BY nome
+    """, fetch="all")
+
+    clientes = query("""
+        SELECT id, nome FROM usuarios 
+        WHERE role = 'cliente' 
+        ORDER BY nome
+    """, fetch="all")
+
+    return render_template("agendamentos.html",
+        agendamentos=registros,
+        barbeiros=barbeiros,
+        servicos=servicos,
+        clientes=clientes
+    )
+
+@app.route("/agendamentos/novo", methods=["POST"])
+def agendamento_novo():
+    if "usuario_id" not in session:
+        return redirect(url_for("login"))
+    query("""
+        INSERT INTO agendamentos 
+            (cliente_id, barbeiro_id, servico_id, data_hora, observacoes)
+        VALUES (%s, %s, %s, %s, %s)
+    """, (
+        request.form["cliente_id"],
+        request.form["barbeiro_id"],
+        request.form["servico_id"],
+        request.form["data_hora"],
+        request.form.get("observacoes", "")
+    ))
+    return redirect(url_for("agendamentos"))
+
+@app.route("/agendamentos/status/<id>", methods=["POST"])
+def agendamento_status(id):
+    if "usuario_id" not in session:
+        return redirect(url_for("login"))
+    query("""
+        UPDATE agendamentos SET status = %s WHERE id = %s
+    """, (request.form["status"], id))
+    return redirect(url_for("agendamentos"))
+
+@app.route("/agendamentos/deletar/<id>", methods=["POST"])
+def agendamento_deletar(id):
+    if "usuario_id" not in session:
+        return redirect(url_for("login"))
+    query("DELETE FROM agendamentos WHERE id = %s", (id,))
+    return redirect(url_for("agendamentos"))
+
 if __name__ == "__main__":
     app.run(debug=True)

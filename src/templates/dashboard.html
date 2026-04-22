@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Bodies Barber — Dashboard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
+</head>
+<body class="dash-page">
+
+  <div class="dither-bg"></div>
+
+  <header class="dash-header">
+    <div class="brand">
+      <h1 class="brand-title">Bodies</h1>
+      <span class="brand-sub">Barber</span>
+    </div>
+    <div class="dash-user">
+      <span class="dash-user-nome">{{ usuario }}</span>
+      <a href="/logout" class="dash-logout">SAIR</a>
+    </div>
+  </header>
+
+  <main class="dash-main">
+    <h2 class="dash-title">PAINEL DE CONTROLE</h2>
+
+    <div class="dash-grid">
+
+      <a href="/agendamentos" class="dash-card">
+        <span class="dash-card-icon">▣</span>
+        <span class="dash-card-label">AGENDAMENTOS</span>
+        <span class="dash-card-sub">Gerenciar agenda</span>
+      </a>
+
+      <a href="/servicos" class="dash-card">
+        <span class="dash-card-icon">✦</span>
+        <span class="dash-card-label">SERVIÇOS</span>
+        <span class="dash-card-sub">Cortes e preços</span>
+      </a>
+
+      <a href="/barbeiros" class="dash-card">
+        <span class="dash-card-icon">◈</span>
+        <span class="dash-card-label">BARBEIROS</span>
+        <span class="dash-card-sub">Equipe</span>
+      </a>
+
+      <a href="/clientes" class="dash-card">
+        <span class="dash-card-icon">◉</span>
+        <span class="dash-card-label">CLIENTES</span>
+        <span class="dash-card-sub">Base de clientes</span>
+      </a>
+
+    </div>
+  </main>
+
+</body>
+</html>
