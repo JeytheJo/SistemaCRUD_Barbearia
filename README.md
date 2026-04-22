@@ -1,78 +1,134 @@
-# 💈 Sistema de Agendamento - Barbearia (Bodies Barber)
-
+# Bodies Barber — Sistema de Agendamento
+ 
 ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
 ![Flask](https://img.shields.io/badge/flask-%23000.svg?style=for-the-badge&logo=flask&logoColor=white)
 ![PostgreSQL](https://img.shields.io/badge/postgresql-%23336791.svg?style=for-the-badge&logo=postgresql&logoColor=white)
-![Status](https://img.shields.io/badge/Status-Em%20Desenvolvimento-yellow?style=for-the-badge)
-
-Este projeto é um sistema de gerenciamento de agendamentos para barbearias, desenvolvido para a disciplina de **Banco de Dados** (2ª Nota) sob orientação do **Prof. Anderson Costa**. A aplicação integra uma interface web moderna com um banco de dados relacional robusto para controle de clientes, serviços e horários.
-
+![Status](https://img.shields.io/badge/Status-Concluído-darkred?style=for-the-badge)
+ 
+> Sistema de gerenciamento de agendamentos para barbearia desenvolvido com Flask e PostgreSQL, com interface brutalista de estética horror. Projeto da disciplina de Banco de Dados (2ª Nota) — UNIFSA, sob orientação do Prof. Anderson Costa.
+ 
 ---
-
-## 📋 Sumário
-- [Sobre o Projeto](#-sobre-o-projeto)
-- [Funcionalidades](#-funcionalidades)
-- [Modelagem do Banco](#-modelagem-do-banco)
-- [Estrutura do Repositório](#-estrutura-do-repositório)
-- [Como Executar](#-como-executar)
-- [Demonstração](#-demonstração)
-- [Vídeo](#-vídeo)
-
+ 
+## Prints da Aplicação
+ 
+> *(adicione os prints na pasta `/docs` e descomente as linhas abaixo)*
+ 
+<!--
+![Login](./docs/login.png)
+![Dashboard](./docs/dashboard.png)
+![Agendamentos](./docs/agendamentos.png)
+-->
+ 
 ---
-
-## 📝 Sobre o Projeto
-O sistema tem como objetivo facilitar a gestão de uma barbearia, permitindo que administradores e barbeiros gerenciem fluxos de atendimento, enquanto garantem a integridade dos dados através de um SGBD relacional.
-
-## ✨ Funcionalidades (CRUD)
-O sistema contempla todos os requisitos obrigatórios do edital:
-- **Autenticação:** Tela de login segura para acesso ao sistema.
-- **Cadastro (Insert):** Inclusão de usuários, serviços e agendamentos.
-- **Consulta (Select):** Listagem dinâmica com filtros e ordenação.
-- **Atualização (Update):** Edição de informações de registros existentes.
-- **Exclusão (Delete):** Remoção de dados do sistema.
-- **Relatórios:** Consultas complexas utilizando **INNER JOIN** e **LEFT JOIN**.
-
-## 🗄️ Modelagem do Banco
-O banco de dados foi modelado no **PostgreSQL** e possui 3 tabelas principais relacionadas:
-- `usuarios`: Cadastro de clientes, barbeiros e admins.
-- `servicos`: Tabela de procedimentos oferecidos.
-- `agendamentos`: Tabela central que conecta clientes, barbeiros e serviços.
-
-### Diagrama Entidade-Relacionamento (DER)
-![Diagrama do Banco de Dados](./diagrama/Diagrama_ER.pdf) 
-
+ 
+## Funcionalidades
+ 
+- Login seguro com hash de senha (SHA-256)
+- CRUD completo de agendamentos, serviços, barbeiros e clientes
+- **INNER JOIN** — listagem de agendamentos com dados de cliente, barbeiro e serviço
+- **LEFT JOIN** — barbeiros e clientes listados com total de agendamentos, mesmo sem nenhum
+- Filtro e ordenação de agendamentos por cliente e status
+- Controle de acesso por perfil (`admin`, `barbeiro`, `cliente`)
 ---
-
-## 📁 Estrutura do Repositório
-Conforme exigido nas normas do trabalho, o projeto está organizado da seguinte forma:
-
-| Pasta | Descrição |
-| :--- | :--- |
-| `/diagrama` | Imagem ou PDF do Diagrama Entidade-Relacionamento (DER). |
-| `/ddl` | Script SQL de criação das tabelas e restrições (Primary/Foreign Keys). |
-| `/dml` | Scripts SQL com exemplos de inserção (população de dados). |
-| `/dql` | Scripts SQL com as consultas realizadas (Selects, Joins, Filtros). |
-| `/src` | Código-fonte da aplicação desenvolvido em Python/Flask. |
-
+ 
+## Modelagem do Banco
+ 
+Três tabelas relacionadas construídas no PostgreSQL:
+ 
+| Tabela | Descrição |
+|---|---|
+| `usuarios` | Armazena clientes, barbeiros e administradores |
+| `servicos` | Catálogo de serviços com preço e duração |
+| `agendamentos` | Tabela central que conecta clientes, barbeiros e serviços |
+ 
+Consulte [`/diagrama`](./diagrama/) para o Diagrama Entidade-Relacionamento completo.
+ 
 ---
-
-## 🚀 Como Executar
-
+ 
+## Estrutura do Repositório
+ 
+| Pasta | Conteúdo |
+|---|---|
+| `/diagrama` | Diagrama Entidade-Relacionamento (PDF) |
+| `/ddl` | Script SQL de criação das tabelas com PKs e FKs |
+| `/dml` | Scripts SQL com exemplos de inserção, atualização e exclusão |
+| `/dql` | Consultas SQL utilizadas no sistema (JOINs, filtros, ordenação) |
+| `/src` | Código-fonte da aplicação (Python/Flask) |
+ 
+---
+ 
+## Como Executar
+ 
 ### Pré-requisitos
-- Python 3.x instalado.
-- PostgreSQL rodando localmente.
-- Biblioteca `psycopg2` ou `flask-sqlalchemy`.
-
-### Passo a Passo
-1. **Clone o repositório:**
-   ```bash
-   git clone [https://github.com/JeytheJo/SistemaCRUD_Barbearia.git](https://github.com/JeytheJo/SistemaCRUD_Barbearia.git)
-   
-2. **Configure o Banco de Dados:**
-   - Abra o seu **pgAdmin** ou **QueryTool**.
-   - Execute o script contido em `/ddl/databasePGSQL.sql` para criar a estrutura de tabelas e restrições.
-   - (Opcional) Execute os scripts em `/dml` para inserir dados de teste.
-
-3. **Instale as dependências:**
-   ```bash
-   pip install flask psycopg2
+ 
+- Python 3.10+
+- PostgreSQL rodando localmente
+- pgAdmin (opcional)
+### 1. Clone o repositório
+ 
+```bash
+git clone https://github.com/JeytheJo/SistemaCRUD_Barbearia.git
+cd SistemaCRUD_Barbearia
+```
+ 
+### 2. Configure o banco de dados
+ 
+Abra o pgAdmin e execute o script DDL para criar as tabelas:
+ 
+```
+ddl/databasePGSQL.sql
+```
+ 
+Opcionalmente, popule com dados de exemplo:
+ 
+```
+dml/inserts.sql
+```
+ 
+### 3. Configure o ambiente
+ 
+Dentro de `/src`, crie um arquivo `.env`:
+ 
+```env
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=CRUD_Barbearia
+DB_USER=postgres
+DB_PASSWORD=sua_senha
+```
+ 
+### 4. Instale as dependências
+ 
+```bash
+pip install flask psycopg2-binary python-dotenv
+```
+ 
+### 5. Execute
+ 
+```bash
+cd src
+python app.py
+```
+ 
+Acesse em **http://127.0.0.1:5000**
+ 
+### Credenciais de teste
+ 
+| E-mail | Senha | Perfil |
+|---|---|---|
+| admin@bodies.com | senha123 | admin |
+| carlos@bodies.com | senha123 | barbeiro |
+ 
+---
+ 
+## Vídeo Demonstrativo
+ 
+🎥 *(Ainda vou gravar. )* 🫩
+ 
+---
+ 
+## Autor
+ 
+**João Eduardo** — [@JeytheJo](https://github.com/JeytheJo)
+ 
+UNIFSA — Disciplina de Banco de Dados — 2026
