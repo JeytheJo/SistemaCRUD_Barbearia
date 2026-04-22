@@ -11,7 +11,7 @@
  
 ## Prints da Aplicação
  
-> *(adicione os prints na pasta `/docs` e descomente as linhas abaixo)*
+> *(logo vou colocar)*
  
 <!--
 ![Login](./docs/login.png)
