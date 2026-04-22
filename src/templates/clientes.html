@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Bodies Barber — Clientes</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
+</head>
+<body class="dash-page">
+  <div class="dither-bg"></div>
+  <header class="dash-header">
+    <div class="brand">
+      <h1 class="brand-title">Bodies</h1>
+      <span class="brand-sub">Barber</span>
+    </div>
+    <div class="dash-user">
+      <span class="dash-user-nome">{{ session["usuario_nome"] }}</span>
+      <a href="/dashboard" class="dash-logout">VOLTAR</a>
+      <a href="/logout" class="dash-logout">SAIR</a>
+    </div>
+  </header>
+  <main class="dash-main">
+    <h2 class="dash-title">CLIENTES</h2>
+
+    <section class="crud-section">
+      <h3 class="crud-section-title">BASE DE CLIENTES</h3>
+      {% if clientes %}
+      <table class="crud-table">
+        <thead>
+          <tr>
+            <th>NOME</th>
+            <th>EMAIL</th>
+            <th>TELEFONE</th>
+            <th>AGENDAMENTOS</th>
+            <th>AÇÕES</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for c in clientes %}
+          <tr>
+            <td>{{ c.nome }}</td>
+            <td>{{ c.email }}</td>
+            <td>{{ c.telefone or '—' }}</td>
+            <td>{{ c.total_agendamentos }}</td>
+            <td>
+              <form method="POST" action="/clientes/deletar/{{ c.id }}" class="inline-form">
+                <button class="btn-mini btn-danger" type="submit"
+                  onclick="return confirm('Deletar cliente?')">✕</button>
+              </form>
+            </td>
+          </tr>
+          {% endfor %}s
+        </tbody>
+      </table>
+      {% else %}
+        <p class="crud-vazio">NENHUM CLIENTE CADASTRADO.</p>
+      {% endif %}
+    </section>
+  </main>
+</body>
+</html>

@@ -37,3 +37,5 @@ CREATE TABLE agendamentos (
     observacoes TEXT,
     criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
+
+SELECT * FROM agendametos

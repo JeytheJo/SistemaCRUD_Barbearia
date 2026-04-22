@@ -149,6 +149,119 @@ def agendamento_deletar(id):
         return redirect(url_for("login"))
     query("DELETE FROM agendamentos WHERE id = %s", (id,))
     return redirect(url_for("agendamentos"))
+    
+# --- Serviços ---
+@app.route("/servicos")
+def servicos():
+    if "usuario_id" not in session:
+        return redirect(url_for("login"))
+    registros = query("SELECT * FROM servicos ORDER BY nome", fetch="all")
+    return render_template("servicos.html", servicos=registros)
+
+@app.route("/servicos/novo", methods=["POST"])
+def servico_novo():
+    if "usuario_id" not in session:
+        return redirect(url_for("login"))
+    query("""
+        INSERT INTO servicos (nome, descricao, preco, duracao_min)
+        VALUES (%s, %s, %s, %s)
+    """, (
+        request.form["nome"],
+        request.form.get("descricao", ""),
+        request.form["preco"],
+        request.form["duracao_min"]
+    ))
+    return redirect(url_for("servicos"))
+
+@app.route("/servicos/editar/<id>", methods=["POST"])
+def servico_editar(id):
+    if "usuario_id" not in session:
+        return redirect(url_for("login"))
+    query("""
+        UPDATE servicos 
+        SET nome=%s, descricao=%s, preco=%s, duracao_min=%s, ativo=%s
+        WHERE id=%s
+    """, (
+        request.form["nome"],
+        request.form.get("descricao", ""),
+        request.form["preco"],
+        request.form["duracao_min"],
+        request.form.get("ativo") == "on",
+        id
+    ))
+    return redirect(url_for("servicos"))
+
+@app.route("/servicos/deletar/<id>", methods=["POST"])
+def servico_deletar(id):
+    if "usuario_id" not in session:
+        return redirect(url_for("login"))
+    query("DELETE FROM servicos WHERE id=%s", (id,))
+    return redirect(url_for("servicos"))
+    
+    # --- Barbeiros ---
+@app.route("/barbeiros")
+def barbeiros():
+    if "usuario_id" not in session:
+        return redirect(url_for("login"))
+
+    registros = query("""
+        SELECT 
+            u.id, u.nome, u.email, u.telefone,
+            COUNT(a.id) AS total_agendamentos
+        FROM usuarios u
+        LEFT JOIN agendamentos a ON a.barbeiro_id = u.id
+        WHERE u.role = 'barbeiro'
+        GROUP BY u.id, u.nome, u.email, u.telefone
+        ORDER BY u.nome
+    """, fetch="all")
+    return render_template("barbeiros.html", barbeiros=registros)
+
+@app.route("/barbeiros/novo", methods=["POST"])
+def barbeiro_novo():
+    if "usuario_id" not in session:
+        return redirect(url_for("login"))
+    query("""
+        INSERT INTO usuarios (nome, email, senha_hash, role, telefone)
+        VALUES (%s, %s, %s, 'barbeiro', %s)
+    """, (
+        request.form["nome"],
+        request.form["email"],
+        __import__('hashlib').sha256(request.form["senha"].encode()).hexdigest(),
+        request.form.get("telefone", "")
+    ))
+    return redirect(url_for("barbeiros"))
+
+@app.route("/barbeiros/deletar/<id>", methods=["POST"])
+def barbeiro_deletar(id):
+    if "usuario_id" not in session:
+        return redirect(url_for("login"))
+    query("DELETE FROM usuarios WHERE id=%s AND role='barbeiro'", (id,))
+    return redirect(url_for("barbeiros"))
+
+# --- Clientes ---
+@app.route("/clientes")
+def clientes():
+    if "usuario_id" not in session:
+        return redirect(url_for("login"))
+
+    registros = query("""
+        SELECT 
+            u.id, u.nome, u.email, u.telefone,
+            COUNT(a.id) AS total_agendamentos
+        FROM usuarios u
+        LEFT JOIN agendamentos a ON a.cliente_id = u.id
+        WHERE u.role = 'cliente'
+        GROUP BY u.id, u.nome, u.email, u.telefone
+        ORDER BY u.nome
+    """, fetch="all")
+    return render_template("clientes.html", clientes=registros)
+
+@app.route("/clientes/deletar/<id>", methods=["POST"])
+def cliente_deletar(id):
+    if "usuario_id" not in session:
+        return redirect(url_for("login"))
+    query("DELETE FROM usuarios WHERE id=%s AND role='cliente'", (id,))
+    return redirect(url_for("clientes"))
 
 if __name__ == "__main__":
     app.run(debug=True)

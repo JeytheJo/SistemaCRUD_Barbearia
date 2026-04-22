@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Bodies Barber — Barbeiros</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
+</head>
+<body class="dash-page">
+  <div class="dither-bg"></div>
+  <header class="dash-header">
+    <div class="brand">
+      <h1 class="brand-title">Bodies</h1>
+      <span class="brand-sub">Barber</span>
+    </div>
+    <div class="dash-user">
+      <span class="dash-user-nome">{{ session["usuario_nome"] }}</span>
+      <a href="/dashboard" class="dash-logout">VOLTAR</a>
+      <a href="/logout" class="dash-logout">SAIR</a>
+    </div>
+  </header>
+  <main class="dash-main">
+    <h2 class="dash-title">BARBEIROS</h2>
+
+    <section class="crud-section">
+      <h3 class="crud-section-title">NOVO BARBEIRO</h3>
+      <form method="POST" action="/barbeiros/novo" class="crud-form">
+        <div class="form-row">
+          <input class="auth-input" type="text" name="nome" placeholder="NOME COMPLETO" required/>
+          <input class="auth-input" type="email" name="email" placeholder="EMAIL" required/>
+        </div>
+        <div class="form-row">
+          <input class="auth-input" type="text" name="telefone" placeholder="TELEFONE"/>
+          <input class="auth-input" type="password" name="senha" placeholder="SENHA" required/>
+        </div>
+        <button class="auth-btn" type="submit">CADASTRAR</button>
+      </form>
+    </section>
+
+    <section class="crud-section">
+      <h3 class="crud-section-title">EQUIPE</h3>
+      {% if barbeiros %}
+      <table class="crud-table">
+        <thead>
+          <tr>
+            <th>NOME</th>
+            <th>EMAIL</th>
+            <th>TELEFONE</th>
+            <th>ATENDIMENTOS</th>
+            <th>AÇÕES</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for b in barbeiros %}
+          <tr>
+            <td>{{ b.nome }}</td>
+            <td>{{ b.email }}</td>
+            <td>{{ b.telefone or '—' }}</td>
+            <td>{{ b.total_agendamentos }}</td>
+            <td>
+              <form method="POST" action="/barbeiros/deletar/{{ b.id }}" class="inline-form">
+                <button class="btn-mini btn-danger" type="submit"
+                  onclick="return confirm('Deletar barbeiro?')">✕</button>
+              </form>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+        <p class="crud-vazio">NENHUM BARBEIRO CADASTRADO.</p>
+      {% endif %}
+    </section>
+  </main>
+</body>
+</html>

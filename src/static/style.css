@@ -50,10 +50,7 @@ body {
 /* BRAND (canto superior esquerdo)
 */
 .brand {
-  position: fixed;
-  top: 24px;
-  left: 28px;
-  z-index: 10;
+
   line-height: 1;
 }
 
@@ -268,9 +265,7 @@ body {
   color: var(--texto-muted);
 }
 
-/* ============================================
-   CRUD — Seções e Formulários
-   ============================================ */
+/* CRUD — Seções e Formulários */
 .crud-section {
   margin-bottom: 48px;
 }
@@ -324,9 +319,7 @@ textarea.auth-input {
   font-family: 'Share Tech Mono', monospace;
 }
 
-/* ============================================
-   TABELA
-   ============================================ */
+/* TABELA*/
 .crud-table {
   width: 100%;
   border-collapse: collapse;
@@ -361,9 +354,8 @@ textarea.auth-input {
   padding: 24px 0;
 }
 
-/* ============================================
-   STATUS BADGES
-   ============================================ */
+/*
+   STATUS BADGES*/
 .status-badge {
   font-size: 0.65rem;
   letter-spacing: 2px;
@@ -375,9 +367,7 @@ textarea.auth-input {
 .status-concluido  { color: var(--texto-muted); }
 .status-cancelado  { color: var(--verm-acento); }
 
-/* ============================================
-   AÇÕES NA TABELA
-   ============================================ */
+/* AÇÕES NA TABELA*/
 .acoes {
   display: flex;
   align-items: center;

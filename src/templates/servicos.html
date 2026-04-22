@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Bodies Barber — Serviços</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
+</head>
+<body class="dash-page">
+
+  <div class="dither-bg"></div>
+
+  <header class="dash-header">
+    <div class="brand">
+      <h1 class="brand-title">Bodies</h1>
+      <span class="brand-sub">Barber</span>
+    </div>
+    <div class="dash-user">
+      <span class="dash-user-nome">{{ session["usuario_nome"] }}</span>
+      <a href="/dashboard" class="dash-logout">VOLTAR</a>
+      <a href="/logout" class="dash-logout">SAIR</a>
+    </div>
+  </header>
+
+  <main class="dash-main">
+    <h2 class="dash-title">SERVIÇOS</h2>
+
+    <!-- NOVO SERVIÇO -->
+    <section class="crud-section">
+      <h3 class="crud-section-title">NOVO SERVIÇO</h3>
+      <form method="POST" action="/servicos/novo" class="crud-form">
+        <div class="form-row">
+          <input class="auth-input" type="text" name="nome" placeholder="NOME DO SERVIÇO" required/>
+          <input class="auth-input" type="number" name="preco" placeholder="PREÇO (R$)" step="0.01" required/>
+        </div>
+        <div class="form-row">
+          <input class="auth-input" type="number" name="duracao_min" placeholder="DURAÇÃO (MIN)" required/>
+          <input class="auth-input" type="text" name="descricao" placeholder="DESCRIÇÃO (OPCIONAL)"/>
+        </div>
+        <button class="auth-btn" type="submit">CADASTRAR</button>
+      </form>
+    </section>
+
+    <!-- TABELA -->
+    <section class="crud-section">
+      <h3 class="crud-section-title">REGISTROS</h3>
+      {% if servicos %}
+      <table class="crud-table">
+        <thead>
+          <tr>
+            <th>NOME</th>
+            <th>DESCRIÇÃO</th>
+            <th>PREÇO</th>
+            <th>DURAÇÃO</th>
+            <th>ATIVO</th>
+            <th>AÇÕES</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for s in servicos %}
+          <tr>
+            <td>{{ s.nome }}</td>
+            <td>{{ s.descricao or '—' }}</td>
+            <td>R$ {{ "%.2f"|format(s.preco) }}</td>
+            <td>{{ s.duracao_min }} MIN</td>
+            <td>
+              <span class="{{ 'status-confirmado' if s.ativo else 'status-cancelado' }}">
+                {{ 'SIM' if s.ativo else 'NÃO' }}
+              </span>
+            </td>
+            <td class="acoes">
+              <!-- Editar -->
+              <button class="btn-mini btn-confirm" 
+                onclick="abrirEdicao('{{ s.id }}','{{ s.nome }}','{{ s.descricao or '' }}','{{ s.preco }}','{{ s.duracao_min }}','{{ s.ativo }}')">
+                ✎
+              </button>
+              <!-- Deletar -->
+              <form method="POST" action="/servicos/deletar/{{ s.id }}" class="inline-form">
+                <button class="btn-mini btn-danger" type="submit"
+                  onclick="return confirm('Deletar serviço?')">✕</button>
+              </form>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+        <p class="crud-vazio">NENHUM SERVIÇO CADASTRADO.</p>
+      {% endif %}
+    </section>
+
+    <!-- MODAL EDIÇÃO -->
+    <div id="modal-edicao" style="display:none;position:fixed;inset:0;background:#000000cc;z-index:100;align-items:center;justify-content:center;">
+      <div style="background:#0f0f0f;border:1px solid #2a2a2a;padding:40px;width:100%;max-width:500px;">
+        <h3 class="crud-section-title">EDITAR SERVIÇO</h3>
+        <form method="POST" id="form-edicao" class="crud-form">
+          <input class="auth-input" type="text" name="nome" id="edit-nome" required/>
+          <div class="form-row">
+            <input class="auth-input" type="number" name="preco" id="edit-preco" step="0.01" required/>
+            <input class="auth-input" type="number" name="duracao_min" id="edit-duracao" required/>
+          </div>
+          <input class="auth-input" type="text" name="descricao" id="edit-descricao"/>
+          <label style="display:flex;align-items:center;gap:8px;font-size:0.75rem;letter-spacing:2px;color:var(--texto-muted);cursor:pointer;">
+            <input type="checkbox" name="ativo" id="edit-ativo"/> ATIVO
+          </label>
+          <div class="form-row">
+            <button class="auth-btn" type="submit">SALVAR</button>
+            <button class="auth-btn" type="button" 
+              onclick="document.getElementById('modal-edicao').style.display='none'"
+              style="background:var(--borda)">CANCELAR</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    function abrirEdicao(id, nome, descricao, preco, duracao, ativo) {
+      document.getElementById('form-edicao').action = '/servicos/editar/' + id;
+      document.getElementById('edit-nome').value = nome;
+      document.getElementById('edit-descricao').value = descricao;
+      document.getElementById('edit-preco').value = preco;
+      document.getElementById('edit-duracao').value = duracao;
+      document.getElementById('edit-ativo').checked = ativo === 'True';
+      const modal = document.getElementById('modal-edicao');
+      modal.style.display = 'flex';
+    }
+  </script>
+
+</body>
+</html>
