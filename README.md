@@ -1,94 +1,59 @@
-# Bodies Barber — Sistema de Agendamento
- 
-![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
-![Flask](https://img.shields.io/badge/flask-%23000.svg?style=for-the-badge&logo=flask&logoColor=white)
-![PostgreSQL](https://img.shields.io/badge/postgresql-%23336791.svg?style=for-the-badge&logo=postgresql&logoColor=white)
-![Status](https://img.shields.io/badge/Status-Concluído-darkred?style=for-the-badge)
- 
-> Sistema de gerenciamento de agendamentos para barbearia desenvolvido com Flask e PostgreSQL, com interface brutalista de estética horror. Projeto da disciplina de Banco de Dados (2ª Nota) — UNIFSA, sob orientação do Prof. Anderson Costa.
- 
----
- 
-## Prints da Aplicação
- 
-> *(logo vou colocar)*
- 
-<!--
+# Sistema de Agendamento para Barbearia - 2ª Nota
+
+Este repositório contém o projeto prático da disciplina de Banco de Dados (2ª Nota). O objetivo é demonstrar a integração de uma aplicação Python com um banco de dados relacional PostgreSQL, realizando operações de CRUD e consultas complexas com JOIN.
+
+## 📌 Sobre o Projeto
+
+O tema escolhido foi um **Sistema de Agendamento para Barbearia (Bodies Barber)**, permitindo o gerenciamento de clientes, barbeiros, serviços e agendamentos através de uma interface web com autenticação de usuários.
+
+## 🛠️ Tecnologias Utilizadas
+
+- **Linguagem:** Python 3.10+
+- **Banco de Dados:** PostgreSQL
+- **Driver de Conexão:** `psycopg2`
+- **Framework Web:** Flask
+- **Interface:** Web (Flask + HTML/CSS) — *Interface Gráfica (Bônus +1,0 ponto)*
+
+## 📂 Estrutura do Repositório
+
+A organização das pastas segue rigorosamente as exigências do professor:
+
+- `/diagrama`: Modelo Entidade-Relacionamento (DER).
+- `/ddl`: Scripts de criação (`CREATE TABLE`, Constraints, PKs e FKs).
+- `/dml`: Scripts de manipulação (`INSERT`, `UPDATE`, `DELETE`).
+- `/dql`: Scripts de consulta (`SELECT`, `JOINs`, Filtros, Ordenação).
+- `/src`: Código-fonte da aplicação Python/Flask.
+
+## 📸 Demonstração (Prints do Sistema)
+
+### 1. Tela de Login
 ![Login](./docs/login.png)
+
+### 2. Menu Principal e Operações CRUD
 ![Dashboard](./docs/dashboard.png)
+
+### 3. Consulta Complexa (Inner/Left Join)
 ![Agendamentos](./docs/agendamentos.png)
--->
- 
----
- 
-## Funcionalidades
- 
-- Login seguro com hash de senha (SHA-256)
-- CRUD completo de agendamentos, serviços, barbeiros e clientes
-- **INNER JOIN** — listagem de agendamentos com dados de cliente, barbeiro e serviço
-- **LEFT JOIN** — barbeiros e clientes listados com total de agendamentos, mesmo sem nenhum
-- Filtro e ordenação de agendamentos por cliente e status
-- Controle de acesso por perfil (`admin`, `barbeiro`, `cliente`)
----
- 
-## Modelagem do Banco
- 
-Três tabelas relacionadas construídas no PostgreSQL:
- 
-| Tabela | Descrição |
-|---|---|
-| `usuarios` | Armazena clientes, barbeiros e administradores |
-| `servicos` | Catálogo de serviços com preço e duração |
-| `agendamentos` | Tabela central que conecta clientes, barbeiros e serviços |
- 
-Consulte [`/diagrama`](./diagrama/) para o Diagrama Entidade-Relacionamento completo.
- 
----
- 
-## Estrutura do Repositório
- 
-| Pasta | Conteúdo |
-|---|---|
-| `/diagrama` | Diagrama Entidade-Relacionamento (PDF) |
-| `/ddl` | Script SQL de criação das tabelas com PKs e FKs |
-| `/dml` | Scripts SQL com exemplos de inserção, atualização e exclusão |
-| `/dql` | Consultas SQL utilizadas no sistema (JOINs, filtros, ordenação) |
-| `/src` | Código-fonte da aplicação (Python/Flask) |
- 
----
- 
-## Como Executar
- 
-### Pré-requisitos
- 
-- Python 3.10+
-- PostgreSQL rodando localmente
-- pgAdmin (opcional)
-### 1. Clone o repositório
- 
+
+## 📺 Vídeo Demonstrativo
+
+Confira a explicação detalhada do sistema e do código no link abaixo:
+👉 [ASSISTIR VÍDEO NO YOUTUBE/DRIVE](#)
+
+## 🚀 Como Executar o Projeto
+
+### Configuração do Banco de Dados
+
+1. Execute o script contido em `/ddl/databasePGSQL.sql`.
+2. (Opcional) Popule o banco com `/dml/inserts.sql`.
+
+### Executando em Python
+
+1. Instale as dependências:
 ```bash
-git clone https://github.com/JeytheJo/SistemaCRUD_Barbearia.git
-cd SistemaCRUD_Barbearia
+pip install flask psycopg2-binary python-dotenv
 ```
- 
-### 2. Configure o banco de dados
- 
-Abra o pgAdmin e execute o script DDL para criar as tabelas:
- 
-```
-ddl/databasePGSQL.sql
-```
- 
-Opcionalmente, popule com dados de exemplo:
- 
-```
-dml/inserts.sql
-```
- 
-### 3. Configure o ambiente
- 
-Dentro de `/src`, crie um arquivo `.env`:
- 
+2. Dentro de `/src`, crie um arquivo `.env` com as credenciais do banco:
 ```env
 DB_HOST=localhost
 DB_PORT=5432
@@ -96,39 +61,29 @@ DB_NAME=CRUD_Barbearia
 DB_USER=postgres
 DB_PASSWORD=sua_senha
 ```
- 
-### 4. Instale as dependências
- 
-```bash
-pip install flask psycopg2-binary python-dotenv
-```
- 
-### 5. Execute
- 
+3. Execute o comando:
 ```bash
 cd src
 python app.py
 ```
- 
-Acesse em **http://127.0.0.1:5000**
- 
-### Credenciais de teste
- 
+4. Acesse em **http://127.0.0.1:5000**
+
+### Credenciais de Teste
+
 | E-mail | Senha | Perfil |
 |---|---|---|
 | admin@bodies.com | senha123 | admin |
 | carlos@bodies.com | senha123 | barbeiro |
- 
----
- 
-## Vídeo Demonstrativo
- 
-🎥 *(Ainda vou gravar. )* 🫩
- 
----
- 
-## Autor
- 
-**João Eduardo** — [@JeytheJo](https://github.com/JeytheJo)
- 
-UNIFSA — Disciplina de Banco de Dados — 2026
+
+## 📄 Regras de Negócio e Consultas Complexas
+
+O sistema realiza consultas complexas para exibir os dados integrados das três tabelas:
+
+- **INNER JOIN:** Para listar agendamentos com nome do cliente, barbeiro e serviço — retorna apenas agendamentos com todos os vínculos válidos.
+- **LEFT JOIN:** Para listar todos os barbeiros e clientes com o total de agendamentos — inclui mesmo os que não possuem nenhum agendamento cadastrado.
+
+## 👤 Autor
+
+- **João Eduardo** — [@JeytheJo](https://github.com/JeytheJo)
+- Centro Universitário Santo Agostinho (UNIFSA)
+- Disciplina: Banco de Dados — Prof. Anderson Costa — [andersoncosta@unifsa.com.br](mailto:andersoncosta@unifsa.com.br)
