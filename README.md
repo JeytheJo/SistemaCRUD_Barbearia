@@ -8,12 +8,20 @@ O tema escolhido foi um **Sistema de Agendamento para Barbearia (Bodies Barber)*
 
 ## 🛠️ Tecnologias Utilizadas
 
+<<<<<<< HEAD
 - **Linguagem:** Python 3.11
 - **Banco de Dados:** PostgreSQL 17
 - **Driver de Conexão:** `psycopg2`
 - **Framework Web:** Flask
 - **Interface:** Web (Flask + HTML/CSS) — *Interface Gráfica (Bônus +1,0 ponto)*
 - **Containerização:** Docker + Docker Compose
+=======
+- **Linguagem:** Python 3.10+
+- **Banco de Dados:** PostgreSQL
+- **Driver de Conexão:** `psycopg2`
+- **Framework Web:** Flask
+- **Interface:** Web (Flask + HTML/CSS) — *Interface Gráfica (Bônus +1,0 ponto)*
+>>>>>>> b1571f865b63b38b988089e008313fa7eed7613e
 
 ## 📂 Estrutura do Repositório
 
@@ -43,6 +51,7 @@ Confira a explicação detalhada do sistema e do código no link abaixo:
 
 ## 🚀 Como Executar o Projeto
 
+<<<<<<< HEAD
 ### ✅ Opção 1 — Com Docker (Recomendado)
 
 Não é necessário instalar Python, PostgreSQL ou configurar banco de dados manualmente.
@@ -50,10 +59,20 @@ Não é necessário instalar Python, PostgreSQL ou configurar banco de dados man
 **Pré-requisitos:** Docker e Docker Compose instalados.
 
 1. Clone o repositório:
+=======
+### Configuração do Banco de Dados
+
+1. Execute o script contido em `/ddl/databasePGSQL.sql`.
+2. (Opcional) Popule o banco com `/dml/inserts.sql`.
+
+### Executando em Python
+
+1. Instale as dependências:
+>>>>>>> b1571f865b63b38b988089e008313fa7eed7613e
 ```bash
-git clone https://github.com/JeytheJo/SistemaCRUD_Barbearia.git
-cd SistemaCRUD_Barbearia
+pip install flask psycopg2-binary python-dotenv
 ```
+<<<<<<< HEAD
 
 2. Suba os containers:
 ```bash
@@ -75,6 +94,9 @@ O banco de dados é criado e populado automaticamente na primeira execução.
    - (Opcional) Popule com `/dml/inserts.sql`.
 
 2. Dentro de `/src`, crie um arquivo `.env`:
+=======
+2. Dentro de `/src`, crie um arquivo `.env` com as credenciais do banco:
+>>>>>>> b1571f865b63b38b988089e008313fa7eed7613e
 ```env
 DB_HOST=localhost
 DB_PORT=5432
@@ -82,6 +104,7 @@ DB_NAME=CRUD_Barbearia
 DB_USER=postgres
 DB_PASSWORD=sua_senha
 ```
+<<<<<<< HEAD
 
 3. Instale as dependências:
 ```bash
@@ -89,14 +112,21 @@ pip install flask psycopg2-binary python-dotenv
 ```
 
 4. Execute:
+=======
+3. Execute o comando:
+>>>>>>> b1571f865b63b38b988089e008313fa7eed7613e
 ```bash
 cd src
 python app.py
 ```
+<<<<<<< HEAD
 
 5. Acesse em **http://127.0.0.1:5000**
 
 ---
+=======
+4. Acesse em **http://127.0.0.1:5000**
+>>>>>>> b1571f865b63b38b988089e008313fa7eed7613e
 
 ### Credenciais de Teste
 
@@ -116,4 +146,8 @@ O sistema realiza consultas complexas para exibir os dados integrados das três 
 
 - **João Eduardo** — [@JeytheJo](https://github.com/JeytheJo)
 - Centro Universitário Santo Agostinho (UNIFSA)
+<<<<<<< HEAD
 - Disciplina: Banco de Dados — Prof. Anderson Costa — [andersoncosta@unifsa.com.br](mailto:andersoncosta@unifsa.com.br)
+=======
+- Disciplina: Banco de Dados — Prof. Anderson Costa — [andersoncosta@unifsa.com.br](mailto:andersoncosta@unifsa.com.br)
+>>>>>>> b1571f865b63b38b988089e008313fa7eed7613e
