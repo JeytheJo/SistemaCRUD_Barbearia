@@ -1,153 +1,133 @@
 # Sistema de Agendamento para Barbearia - 2ª Nota
 
-Este repositório contém o projeto prático da disciplina de Banco de Dados (2ª Nota). O objetivo é demonstrar a integração de uma aplicação Python com um banco de dados relacional PostgreSQL, realizando operações de CRUD e consultas complexas com JOIN.
+Este repositório apresenta o projeto prático da disciplina de Banco de Dados (2ª Nota), cujo objetivo é demonstrar a integração de uma aplicação Python com um banco de dados relacional PostgreSQL, realizando operações de CRUD e consultas complexas com JOIN.
+
+---
 
 ## 📌 Sobre o Projeto
 
-O tema escolhido foi um **Sistema de Agendamento para Barbearia (Bodies Barber)**, permitindo o gerenciamento de clientes, barbeiros, serviços e agendamentos através de uma interface web com autenticação de usuários.
+O sistema **Bodies Barber** permite o gerenciamento de clientes, barbeiros, serviços e agendamentos, tudo através de uma interface web com autenticação de usuários.
+
+---
 
 ## 🛠️ Tecnologias Utilizadas
 
-<<<<<<< HEAD
-- **Linguagem:** Python 3.11
-- **Banco de Dados:** PostgreSQL 17
-- **Driver de Conexão:** `psycopg2`
-- **Framework Web:** Flask
-- **Interface:** Web (Flask + HTML/CSS) — *Interface Gráfica (Bônus +1,0 ponto)*
-- **Containerização:** Docker + Docker Compose
-=======
 - **Linguagem:** Python 3.10+
 - **Banco de Dados:** PostgreSQL
 - **Driver de Conexão:** `psycopg2`
 - **Framework Web:** Flask
 - **Interface:** Web (Flask + HTML/CSS) — *Interface Gráfica (Bônus +1,0 ponto)*
->>>>>>> b1571f865b63b38b988089e008313fa7eed7613e
+- **Containerização:** Docker + Docker Compose
+
+---
 
 ## 📂 Estrutura do Repositório
 
-A organização das pastas segue rigorosamente as exigências do professor:
+Organização das pastas conforme exigências da disciplina:
 
-- `/diagrama`: Modelo Entidade-Relacionamento (DER).
-- `/ddl`: Scripts de criação (`CREATE TABLE`, Constraints, PKs e FKs).
-- `/dml`: Scripts de manipulação (`INSERT`, `UPDATE`, `DELETE`).
-- `/dql`: Scripts de consulta (`SELECT`, `JOINs`, Filtros, Ordenação).
-- `/src`: Código-fonte da aplicação Python/Flask.
+```
+├── diagrama   # Modelo Entidade-Relacionamento (DER)
+├── ddl        # Scripts de criação (CREATE TABLE, Constraints, PKs e FKs)
+├── dml        # Scripts de manipulação (INSERT, UPDATE, DELETE)
+├── dql        # Scripts de consulta (SELECT, JOINs, Filtros, Ordenação)
+└── src        # Código-fonte da aplicação Python/Flask
+```
 
-## 📸 Demonstração (Prints do Sistema)
+---
 
-### 1. Tela de Login
+## 📸 Demonstração
+
+**1. Tela de Login**
+
 ![Login](./docs/login.png)
 
-### 2. Menu Principal e Operações CRUD
+**2. Menu Principal e Operações CRUD**
+
 ![Dashboard](./docs/dashboard.png)
 
-### 3. Consulta Complexa (Inner/Left Join)
+**3. Consulta Complexa (Inner/Left Join)**
+
 ![Agendamentos](./docs/agendamentos.png)
+
+---
 
 ## 📺 Vídeo Demonstrativo
 
-Confira a explicação detalhada do sistema e do código no link abaixo:
+Assista à explicação detalhada do sistema e do código:
+
 👉 [ASSISTIR VÍDEO NO YOUTUBE/DRIVE](#)
+
+---
 
 ## 🚀 Como Executar o Projeto
 
-<<<<<<< HEAD
-### ✅ Opção 1 — Com Docker (Recomendado)
-
-Não é necessário instalar Python, PostgreSQL ou configurar banco de dados manualmente.
+### 1. Com Docker (Recomendado)
 
 **Pré-requisitos:** Docker e Docker Compose instalados.
 
 1. Clone o repositório:
-=======
-### Configuração do Banco de Dados
-
-1. Execute o script contido em `/ddl/databasePGSQL.sql`.
-2. (Opcional) Popule o banco com `/dml/inserts.sql`.
-
-### Executando em Python
-
-1. Instale as dependências:
->>>>>>> b1571f865b63b38b988089e008313fa7eed7613e
-```bash
-pip install flask psycopg2-binary python-dotenv
-```
-<<<<<<< HEAD
-
+   ```bash
+   git clone https://github.com/JeytheJo/SistemaCRUD_Barbearia.git
+   cd SistemaCRUD_Barbearia
+   ```
 2. Suba os containers:
-```bash
-docker compose up --build
-```
-
+   ```bash
+   docker compose up --build
+   ```
 3. Acesse em **http://localhost:5000**
 
-O banco de dados é criado e populado automaticamente na primeira execução.
+> O banco de dados é criado e populado automaticamente na primeira execução.
 
 ---
 
-### Opção 2 — Sem Docker (Execução Local)
+### 2. Execução Local (Sem Docker)
 
 **Pré-requisitos:** Python 3.10+ e PostgreSQL rodando localmente.
 
-1. Configure o banco de dados no pgAdmin:
-   - Execute o script contido em `/ddl/databasePGSQL.sql`.
+1. Configure o banco de dados:
+   - Execute o script em `/ddl/databasePGSQL.sql`.
    - (Opcional) Popule com `/dml/inserts.sql`.
-
-2. Dentro de `/src`, crie um arquivo `.env`:
-=======
 2. Dentro de `/src`, crie um arquivo `.env` com as credenciais do banco:
->>>>>>> b1571f865b63b38b988089e008313fa7eed7613e
-```env
-DB_HOST=localhost
-DB_PORT=5432
-DB_NAME=CRUD_Barbearia
-DB_USER=postgres
-DB_PASSWORD=sua_senha
-```
-<<<<<<< HEAD
-
+   ```env
+   DB_HOST=localhost
+   DB_PORT=5432
+   DB_NAME=CRUD_Barbearia
+   DB_USER=postgres
+   DB_PASSWORD=minha_senha_segura
+   ```
 3. Instale as dependências:
-```bash
-pip install flask psycopg2-binary python-dotenv
-```
-
-4. Execute:
-=======
-3. Execute o comando:
->>>>>>> b1571f865b63b38b988089e008313fa7eed7613e
-```bash
-cd src
-python app.py
-```
-<<<<<<< HEAD
-
+   ```bash
+   pip install flask psycopg2-binary python-dotenv
+   ```
+4. Execute o sistema:
+   ```bash
+   cd src
+   python app.py
+   ```
 5. Acesse em **http://127.0.0.1:5000**
 
 ---
-=======
-4. Acesse em **http://127.0.0.1:5000**
->>>>>>> b1571f865b63b38b988089e008313fa7eed7613e
 
-### Credenciais de Teste
+### 👤 Credenciais de Teste
 
-| E-mail | Senha | Perfil |
-|---|---|---|
-| admin@bodies.com | senha123 | admin |
-| carlos@bodies.com | senha123 | barbeiro |
+| E-mail               | Senha     | Perfil    |
+|----------------------|-----------|-----------|
+| admin@bodies.com     | senha123  | admin     |
+| carlos@bodies.com    | senha123  | barbeiro  |
+
+---
 
 ## 📄 Regras de Negócio e Consultas Complexas
 
-O sistema realiza consultas complexas para exibir os dados integrados das três tabelas:
+O sistema realiza consultas complexas para exibir dados integrados das tabelas:
 
-- **INNER JOIN:** Para listar agendamentos com nome do cliente, barbeiro e serviço — retorna apenas agendamentos com todos os vínculos válidos.
-- **LEFT JOIN:** Para listar todos os barbeiros e clientes com o total de agendamentos — inclui mesmo os que não possuem nenhum agendamento cadastrado.
+- **INNER JOIN:** Lista agendamentos com nome do cliente, barbeiro e serviço (apenas agendamentos com todos os vínculos válidos).
+- **LEFT JOIN:** Lista todos os barbeiros e clientes com o total de agendamentos (inclui quem não possui nenhum agendamento).
+
+---
 
 ## 👤 Autor
 
 - **João Eduardo** — [@JeytheJo](https://github.com/JeytheJo)
 - Centro Universitário Santo Agostinho (UNIFSA)
-<<<<<<< HEAD
 - Disciplina: Banco de Dados — Prof. Anderson Costa — [andersoncosta@unifsa.com.br](mailto:andersoncosta@unifsa.com.br)
-=======
-- Disciplina: Banco de Dados — Prof. Anderson Costa — [andersoncosta@unifsa.com.br](mailto:andersoncosta@unifsa.com.br)
->>>>>>> b1571f865b63b38b988089e008313fa7eed7613e
