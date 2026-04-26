@@ -1,0 +1,32 @@
+services:
+  db:
+    build:
+      context: .
+      dockerfile: Dockerfile.db
+    container_name: barbearia_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: senha123
+      POSTGRES_DB: CRUD_Barbearia
+    ports:
+      - "5433:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d CRUD_Barbearia"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  web:
+    build: ./src
+    container_name: barbearia_web
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "5000:5000"
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: CRUD_Barbearia
+      DB_USER: postgres
+      DB_PASSWORD: senha123

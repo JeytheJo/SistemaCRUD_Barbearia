@@ -3,92 +3,46 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- Tabela de Usuários (Clientes e Barbeiros)
 CREATE TABLE usuarios (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(), -- Conforme seu diagrama [cite: 72]
-    nome VARCHAR(150) NOT NULL, -- [cite: 80]
-    email VARCHAR(100) UNIQUE NOT NULL, -- [cite: 81]
-    senha_hash VARCHAR(255) NOT NULL, -- [cite: 82]
-    role VARCHAR(20) NOT NULL CHECK (role IN ('cliente', 'barbeiro', 'admin')), -- Enum do diagrama [cite: 88]
-    telefone VARCHAR(20), -- [cite: 84]
-    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL -- [cite: 85]
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    nome VARCHAR(150) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    senha_hash VARCHAR(255) NOT NULL,
+    role VARCHAR(20) NOT NULL CHECK (role IN ('cliente', 'barbeiro', 'admin')),
+    telefone VARCHAR(20),
+    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
-
-SELECT * FROM usuario
 
 -- Tabela de Serviços
 CREATE TABLE servicos (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(), -- [cite: 94]
-    nome VARCHAR(150) NOT NULL, -- [cite: 95]
-    descricao TEXT, -- [cite: 102]
-    preco DECIMAL(8,2) NOT NULL, -- [cite: 103, 106]
-    duracao_min INTEGER NOT NULL, -- [cite: 104, 107]
-    ativo BOOLEAN DEFAULT TRUE NOT NULL -- [cite: 105, 108]
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    nome VARCHAR(150) NOT NULL,
+    descricao TEXT,
+    preco DECIMAL(8,2) NOT NULL,
+    duracao_min INTEGER NOT NULL,
+    ativo BOOLEAN DEFAULT TRUE NOT NULL
 );
 
--- Tabela de Agendamentos (Tabela central que faz os JOINs)
+-- Tabela de Agendamentos
 CREATE TABLE agendamentos (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(), -- [cite: 115]
-    
-    -- Chaves Estrangeiras ligando as tabelas [cite: 116, 118, 120]
-    cliente_id UUID NOT NULL REFERENCES usuarios(id) ON DELETE CASCADE, -- [cite: 109, 117]
-    barbeiro_id UUID NOT NULL REFERENCES usuarios(id) ON DELETE CASCADE, -- [cite: 110, 119]
-    servico_id UUID NOT NULL REFERENCES servicos(id) ON DELETE CASCADE, -- [cite: 111, 121]
-    
-    data_hora TIMESTAMP NOT NULL, -- [cite: 127]
-    status VARCHAR(30) NOT NULL DEFAULT 'pendente' 
-        CHECK (status IN ('pendente', 'confirmado', 'concluido', 'cancelado')), -- Enum do diagrama [cite: 130]
-    observacoes TEXT, -- [cite: 132]
-    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL -- [cite: 134]
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    cliente_id UUID NOT NULL REFERENCES usuarios(id) ON DELETE CASCADE,
+    barbeiro_id UUID NOT NULL REFERENCES usuarios(id) ON DELETE CASCADE,
+    servico_id UUID NOT NULL REFERENCES servicos(id) ON DELETE CASCADE,
+    data_hora TIMESTAMP NOT NULL,
+    status VARCHAR(30) NOT NULL DEFAULT 'pendente'
+        CHECK (status IN ('pendente', 'confirmado', 'concluido', 'cancelado')),
+    observacoes TEXT,
+    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
-INSERT INTO usuarios (nome, email, senha_hash, role)
-VALUES (
-    'Admin Teste',
-    'admin@bodies.com',
-    encode(sha256('senha123'), 'hex'),
-    'admin'
-);
+-- Usuários iniciais para teste
+INSERT INTO usuarios (nome, email, senha_hash, role) VALUES
+('Admin Teste', 'admin@bodies.com', encode(sha256('senha123'), 'hex'), 'admin');
 
+INSERT INTO usuarios (nome, email, senha_hash, role, telefone) VALUES
+('Carlos Barbeiro', 'carlos@bodies.com', encode(sha256('senha123'), 'hex'), 'barbeiro', '(86) 99999-0001');
 
-SELECT nome, role FROM usuarios;
-
-INSERT INTO usuarios (nome, email, senha_hash, role, telefone)
-VALUES (
-    'Carlos Barbeiro',
-    'carlos@bodies.com',
-    encode(sha256('senha123'), 'hex'),
-    'barbeiro',
-    '(86) 99999-0001'
-);
-
-INSERT INTO servicos (nome, descricao, preco, duracao_min)
-VALUES ('Corte Degradê', 'Corte moderno com máquina', 35.00, 45),
+INSERT INTO servicos (nome, descricao, preco, duracao_min) VALUES
+('Corte Degradê', 'Corte moderno com máquina', 35.00, 45),
 ('Barba Completa', 'Barba na navalha com toalha quente', 25.00, 30),
 ('Combo Corte + Barba', 'Corte degradê e barba completa', 55.00, 75);
-
-SELECT * FROM usuarios
-
-select * from servicos
-
--- INNER JOIN: agendamentos com todos os dados
-SELECT 
-    a.data_hora,
-    a.status,
-    c.nome AS cliente,
-    b.nome AS barbeiro,
-    s.nome AS servico,
-    s.preco
-FROM agendamentos a
-INNER JOIN usuarios c ON c.id = a.cliente_id
-INNER JOIN usuarios b ON b.id = a.barbeiro_id
-INNER JOIN servicos s ON s.id = a.servico_id
-ORDER BY a.data_hora DESC;
-
--- LEFT JOIN: barbeiros e total de atendimentos
-SELECT 
-    u.nome AS barbeiro,
-    COUNT(a.id) AS total_atendimentos
-FROM usuarios u
-LEFT JOIN agendamentos a ON a.barbeiro_id = u.id
-WHERE u.role = 'barbeiro'
-GROUP BY u.id, u.nome
-ORDER BY total_atendimentos DESC;

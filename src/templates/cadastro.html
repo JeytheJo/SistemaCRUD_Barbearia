@@ -5,60 +5,65 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Bodies Barber — Cadastro</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
+  <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='favicon.svg') }}"/>
 </head>
 <body class="auth-page">
 
-  <div class="brand">
-    <h1 class="brand-title">Bodies</h1>
-    <span class="brand-sub">Barber</span>
-  </div>
-
   <div class="dither-bg"></div>
 
-  <main class="auth-box">
-    <h2 class="auth-title">SEU PRIMEIRO CADASTRO</h2>
+  <div class="auth-layout">
+    <div class="auth-brand-side">
+      <div class="brand">
+        <h1 class="brand-title">Bodies</h1>
+        <span class="brand-sub">Barber</span>
+      </div>
+    </div>
 
-    {% if erro %}
-      <p class="auth-erro">{{ erro }}</p>
-    {% endif %}
+    <main class="auth-box">
+      <h2 class="auth-title">SEU PRIMEIRO CADASTRO</h2>
 
-    {% if sucesso %}
-      <p class="auth-sucesso">{{ sucesso }}</p>
-    {% endif %}
+      {% if erro %}
+        <p class="auth-erro">{{ erro }}</p>
+      {% endif %}
 
-    <form method="POST" action="/cadastro">
-      <input
-        class="auth-input"
-        type="text"
-        name="nome"
-        placeholder="NOME COMPLETO"
-        required
-      />
-      <input
-        class="auth-input"
-        type="email"
-        name="email"
-        placeholder="NOME@GMAIL.COM"
-        required
-      />
-      <input
-        class="auth-input"
-        type="text"
-        name="telefone"
-        placeholder="TELEFONE (OPCIONAL)"
-      />
-      <input
-        class="auth-input"
-        type="password"
-        name="senha"
-        placeholder="SENHA"
-        required
-      />
-      <button class="auth-btn" type="submit">PROSSEGUIR</button>
-    </form>
+      {% if sucesso %}
+        <p class="auth-sucesso">{{ sucesso }}</p>
+      {% endif %}
 
-    <a class="auth-link" href="/login">JÁ TENHO CONTA</a>
-  </main>
+      <form method="POST" action="/cadastro">
+        <input
+          class="auth-input"
+          type="text"
+          name="nome"
+          placeholder="NOME COMPLETO"
+          required
+        />
+        <input
+          class="auth-input"
+          type="email"
+          name="email"
+          placeholder="NOME@GMAIL.COM"
+          required
+        />
+        <input
+          class="auth-input"
+          type="text"
+          name="telefone"
+          placeholder="TELEFONE (OPCIONAL)"
+        />
+        <input
+          class="auth-input"
+          type="password"
+          name="senha"
+          placeholder="SENHA"
+          required
+        />
+        <button class="auth-btn" type="submit">PROSSEGUIR</button>
+      </form>
+
+      <a class="auth-link" href="/login">JÁ TENHO CONTA</a>
+    </main>
+  </div>
 
 </body>
 </html>

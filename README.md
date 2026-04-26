@@ -8,11 +8,12 @@ O tema escolhido foi um **Sistema de Agendamento para Barbearia (Bodies Barber)*
 
 ## 🛠️ Tecnologias Utilizadas
 
-- **Linguagem:** Python 3.10+
-- **Banco de Dados:** PostgreSQL
+- **Linguagem:** Python 3.11
+- **Banco de Dados:** PostgreSQL 17
 - **Driver de Conexão:** `psycopg2`
 - **Framework Web:** Flask
 - **Interface:** Web (Flask + HTML/CSS) — *Interface Gráfica (Bônus +1,0 ponto)*
+- **Containerização:** Docker + Docker Compose
 
 ## 📂 Estrutura do Repositório
 
@@ -42,18 +43,38 @@ Confira a explicação detalhada do sistema e do código no link abaixo:
 
 ## 🚀 Como Executar o Projeto
 
-### Configuração do Banco de Dados
+### ✅ Opção 1 — Com Docker (Recomendado)
 
-1. Execute o script contido em `/ddl/databasePGSQL.sql`.
-2. (Opcional) Popule o banco com `/dml/inserts.sql`.
+Não é necessário instalar Python, PostgreSQL ou configurar banco de dados manualmente.
 
-### Executando em Python
+**Pré-requisitos:** Docker e Docker Compose instalados.
 
-1. Instale as dependências:
+1. Clone o repositório:
 ```bash
-pip install flask psycopg2-binary python-dotenv
+git clone https://github.com/JeytheJo/SistemaCRUD_Barbearia.git
+cd SistemaCRUD_Barbearia
 ```
-2. Dentro de `/src`, crie um arquivo `.env` com as credenciais do banco:
+
+2. Suba os containers:
+```bash
+docker compose up --build
+```
+
+3. Acesse em **http://localhost:5000**
+
+O banco de dados é criado e populado automaticamente na primeira execução.
+
+---
+
+### Opção 2 — Sem Docker (Execução Local)
+
+**Pré-requisitos:** Python 3.10+ e PostgreSQL rodando localmente.
+
+1. Configure o banco de dados no pgAdmin:
+   - Execute o script contido em `/ddl/databasePGSQL.sql`.
+   - (Opcional) Popule com `/dml/inserts.sql`.
+
+2. Dentro de `/src`, crie um arquivo `.env`:
 ```env
 DB_HOST=localhost
 DB_PORT=5432
@@ -61,12 +82,21 @@ DB_NAME=CRUD_Barbearia
 DB_USER=postgres
 DB_PASSWORD=sua_senha
 ```
-3. Execute o comando:
+
+3. Instale as dependências:
+```bash
+pip install flask psycopg2-binary python-dotenv
+```
+
+4. Execute:
 ```bash
 cd src
 python app.py
 ```
-4. Acesse em **http://127.0.0.1:5000**
+
+5. Acesse em **http://127.0.0.1:5000**
+
+---
 
 ### Credenciais de Teste
 
