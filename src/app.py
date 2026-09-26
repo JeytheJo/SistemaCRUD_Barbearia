@@ -75,6 +75,8 @@ def agendamentos():
         return redirect(url_for("login"))
 
     # INNER JOIN — só agendamentos com cliente, barbeiro e serviço válidos
+    
+    # O plano é tirar tudo isso aqui e mudar pra ser apenas um view em algumas consultas
     registros = query("""
         SELECT 
             a.id,
