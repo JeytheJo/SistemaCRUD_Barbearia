@@ -55,7 +55,7 @@ Organização das pastas conforme exigências da disciplina:
 
 Assista à explicação detalhada do sistema e do código:
 
-👉 [ASSISTIR VÍDEO NO YOUTUBE/DRIVE](#)
+👉 [ASSISTIR VÍDEO NO DRIVE](https://drive.google.com/file/d/1uxiMJJlk_rlrPU8ZC60f0ZPfR79aiIlz/view?usp=sharing)
 
 ---
 
