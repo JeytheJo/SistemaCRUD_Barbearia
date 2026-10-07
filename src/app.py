@@ -3,7 +3,7 @@ from database import query
 import hashlib
 
 app = Flask(__name__)
-app.secret_key = "bodies_barber_secret_123"
+app.secret_key = "minha_senha_segura"
 
 def hash_senha(senha):
     return hashlib.sha256(senha.encode()).hexdigest()

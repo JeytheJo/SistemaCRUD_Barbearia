@@ -23,7 +23,9 @@ body {
   min-height: 100vh;
 }
 
-/* AUTH PAGE */
+/* ============================================
+   AUTH PAGE
+   ============================================ */
 .auth-page {
   position: relative;
   min-height: 100vh;
@@ -63,7 +65,9 @@ body {
   pointer-events: none;
 }
 
-/* BRAND */
+/* ============================================
+   BRAND
+   ============================================ */
 .brand {
   line-height: 1;
   text-align: center;
@@ -88,7 +92,9 @@ body {
   margin-top: 8px;
 }
 
-/* AUTH BOX */
+/* ============================================
+   AUTH BOX
+   ============================================ */
 .auth-box {
   position: relative;
   z-index: 10;
@@ -124,7 +130,9 @@ body {
   text-align: center;
 }
 
-/* INPUTS */
+/* ============================================
+   INPUTS
+   ============================================ */
 .auth-input {
   width: 100%;
   background: transparent;
@@ -147,7 +155,9 @@ body {
   border-color: var(--verm-escuro);
 }
 
-/* BOTÃO */
+/* ============================================
+   BOTÃO
+   ============================================ */
 .auth-btn {
   width: 100%;
   background: var(--verm-acento);
@@ -179,7 +189,9 @@ body {
   color: var(--texto);
 }
 
-/* DASHBOARD*/
+/* ============================================
+   DASHBOARD
+   ============================================ */
 .dash-page {
   position: relative;
   min-height: 100vh;
@@ -235,7 +247,9 @@ body {
   margin-bottom: 40px;
 }
 
-/* CARDS */
+/* ============================================
+   CARDS
+   ============================================ */
 .dash-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -279,7 +293,9 @@ body {
   color: var(--texto-muted);
 }
 
-/* CRUD — Seções e Formulários */
+/* ============================================
+   CRUD — Seções e Formulários
+   ============================================ */
 .crud-section {
   margin-bottom: 48px;
 }
@@ -333,7 +349,9 @@ textarea.auth-input {
   font-family: 'Share Tech Mono', monospace;
 }
 
-/* TABELA */
+/* ============================================
+   TABELA
+   ============================================ */
 .crud-table {
   width: 100%;
   border-collapse: collapse;
@@ -368,7 +386,9 @@ textarea.auth-input {
   padding: 24px 0;
 }
 
-/* STATUS BADGES */
+/* ============================================
+   STATUS BADGES
+   ============================================ */
 .status-badge {
   font-size: 0.65rem;
   letter-spacing: 2px;
@@ -380,7 +400,9 @@ textarea.auth-input {
 .status-concluido  { color: var(--texto-muted); }
 .status-cancelado  { color: var(--verm-acento); }
 
-/* AÇÕES NA TABELA */
+/* ============================================
+   AÇÕES NA TABELA
+   ============================================ */
 .acoes {
   display: flex;
   align-items: center;

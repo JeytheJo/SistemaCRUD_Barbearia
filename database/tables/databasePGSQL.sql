@@ -1,3 +1,4 @@
+-- SQLBook: Code
 -- Habilita a geração automática de UUID
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
@@ -46,3 +47,6 @@ INSERT INTO servicos (nome, descricao, preco, duracao_min) VALUES
 ('Corte Degradê', 'Corte moderno com máquina', 35.00, 45),
 ('Barba Completa', 'Barba na navalha com toalha quente', 25.00, 30),
 ('Combo Corte + Barba', 'Corte degradê e barba completa', 55.00, 75);
+
+-- SQLBook: Code
+SELECT * FROM servicos;
