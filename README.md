@@ -1,133 +1,151 @@
-# Sistema de Agendamento para Barbearia - 2ª Nota
+# Sistema de Agendamento para Barbearia — Bodies Barber
 
-Este repositório apresenta o projeto prático da disciplina de Banco de Dados (2ª Nota), cujo objetivo é demonstrar a integração de uma aplicação Python com um banco de dados relacional PostgreSQL, realizando operações de CRUD e consultas complexas com JOIN.
+Projeto prático da disciplina de **Banco de Dados (2ª Nota)** — Centro Universitário Santo Agostinho (UNIFSA).
 
----
-
-## 📌 Sobre o Projeto
-
-O sistema **Bodies Barber** permite o gerenciamento de clientes, barbeiros, serviços e agendamentos, tudo através de uma interface web com autenticação de usuários.
+Demonstra integração Python + PostgreSQL com operações CRUD, consultas com JOIN, além de **VIEW**, **FUNCTION** e **PROCEDURE** implementadas no banco.
 
 ---
 
-## 🛠️ Tecnologias Utilizadas
+## 🛠️ Tecnologias
 
-- **Linguagem:** Python 3.10+
-- **Banco de Dados:** PostgreSQL
-- **Driver de Conexão:** `psycopg2`
-- **Framework Web:** Flask
-- **Interface:** Web (Flask + HTML/CSS) — *Interface Gráfica (Bônus +1,0 ponto)*
-- **Containerização:** Docker + Docker Compose
+| Camada | Tecnologia |
+|---|---|
+| Backend | Python 3 + Flask |
+| Banco de dados | PostgreSQL 17 (Supabase) |
+| Driver | psycopg2 |
+| Interface | Web (Flask + HTML/CSS) |
 
 ---
 
-## 📂 Estrutura do Repositório
-
-Organização das pastas conforme exigências da disciplina:
+## 📂 Estrutura
 
 ```
-├── diagrama   # Modelo Entidade-Relacionamento (DER)
-├── ddl        # Scripts de criação (CREATE TABLE, Constraints, PKs e FKs)
-├── dml        # Scripts de manipulação (INSERT, UPDATE, DELETE)
-├── dql        # Scripts de consulta (SELECT, JOINs, Filtros, Ordenação)
-└── src        # Código-fonte da aplicação Python/Flask
+SistemaCRUD_Barbearia/
+├── database/
+│   ├── views/       vw_agendamentos_completos.sql
+│   ├── functions/   fn_faturamento_barbeiro.sql
+│   └── procedures/  sp_confirmar_agendamento.sql
+├── ddl/             databasePGSQL.sql
+├── dml/             inserts.sql
+├── dql/             queries.sql
+├── docs/            prints do sistema
+└── src/
+    ├── app.py
+    ├── database.py
+    ├── requirements.txt
+    ├── templates/
+    └── static/
 ```
 
 ---
 
-## 📸 Demonstração
+## 🗄️ Recursos Avançados do Banco
 
-**1. Tela de Login**
+### VIEW — `vw_agendamentos_completos`
+Consolida agendamentos, clientes, barbeiros e serviços em uma única consulta. Usada na rota `/relatorio`.
 
+```sql
+SELECT * FROM vw_agendamentos_completos;
+```
+
+### FUNCTION — `fn_faturamento_barbeiro(uuid)`
+Retorna o total faturado por um barbeiro (agendamentos com status `concluido`). Usada na rota `/barbeiros`.
+
+```sql
+SELECT fn_faturamento_barbeiro('<uuid do barbeiro>');
+```
+
+### PROCEDURE — `sp_confirmar_agendamento(uuid)`
+Confirma um agendamento pendente com segurança. Chamada ao confirmar agendamentos na rota `/agendamentos`.
+
+```sql
+CALL sp_confirmar_agendamento('<uuid do agendamento>');
+```
+
+---
+
+## 🚀 Como Executar (sem Docker)
+
+**Pré-requisitos:** Python 3.10 ou superior instalado.
+
+### 1. Clone o repositório
+```bash
+git clone https://github.com/JeytheJo/SistemaCRUD_Barbearia.git
+cd SistemaCRUD_Barbearia
+```
+
+### 2. Instale as dependências
+```bash
+pip install flask psycopg2-binary python-dotenv
+```
+
+> No Linux/Fedora, se necessário: `pip install --break-system-packages flask psycopg2-binary python-dotenv`
+
+### 3. Configure o banco de dados
+
+Crie o arquivo `src/.env` com as credenciais do Supabase:
+
+```env
+DB_HOST=db.XXXXXXXXXXXXXXXX.supabase.co
+DB_PORT=5432
+DB_NAME=postgres
+DB_USER=postgres
+DB_PASSWORD=sua_senha_aqui
+```
+
+> As credenciais completas estão em: **Supabase → Settings → Database → Connection parameters**
+
+### 4. Execute
+
+```bash
+cd src
+python app.py
+```
+
+### 5. Acesse no navegador
+
+```
+http://127.0.0.1:5000
+```
+
+---
+
+## 🔑 Credenciais de Teste
+
+| E-mail | Senha | Perfil |
+|---|---|---|
+| admin@bodies.com | senha123 | admin |
+| carlos@bodies.com | senha123 | barbeiro |
+
+---
+
+## 📸 Telas do Sistema
+
+### Login
 ![Login](./docs/login.png)
 
-**2. Menu Principal e Operações CRUD**
-
+### Dashboard
 ![Dashboard](./docs/dashboard.png)
 
-**3. Consulta Complexa (Inner/Left Join)**
-
+### Agendamentos (CRUD + PROCEDURE)
 ![Agendamentos](./docs/agendamentos.png)
+
+### Relatório (VIEW)
+![Relatório](./docs/relatorio.png)
+
+### Barbeiros (FUNCTION)
+![Barbeiros](./docs/barbeiros.png)
 
 ---
 
 ## 📺 Vídeo Demonstrativo
 
-Assista à explicação detalhada do sistema e do código:
-
-👉 [ASSISTIR VÍDEO NO DRIVE](https://drive.google.com/file/d/1uxiMJJlk_rlrPU8ZC60f0ZPfR79aiIlz/view?usp=sharing)
-
----
-
-## 🚀 Como Executar o Projeto
-
-### 1. Com Docker (Recomendado)
-
-**Pré-requisitos:** Docker e Docker Compose instalados.
-
-1. Clone o repositório:
-   ```bash
-   git clone https://github.com/JeytheJo/SistemaCRUD_Barbearia.git
-   cd SistemaCRUD_Barbearia
-   ```
-2. Suba os containers:
-   ```bash
-   docker compose up --build
-   ```
-3. Acesse em **http://localhost:5000**
-
-> O banco de dados é criado e populado automaticamente na primeira execução.
-
----
-
-### 2. Execução Local (Sem Docker)
-
-**Pré-requisitos:** Python 3.10+ e PostgreSQL rodando localmente.
-
-1. Configure o banco de dados:
-   - Execute o script em `/ddl/databasePGSQL.sql`.
-   - (Opcional) Popule com `/dml/inserts.sql`.
-2. Dentro de `/src`, crie um arquivo `.env` com as credenciais do banco:
-   ```env
-   DB_HOST=localhost
-   DB_PORT=5432
-   DB_NAME=CRUD_Barbearia
-   DB_USER=postgres
-   DB_PASSWORD=minha_senha_segura
-   ```
-3. Instale as dependências:
-   ```bash
-   pip install flask psycopg2-binary python-dotenv
-   ```
-4. Execute o sistema:
-   ```bash
-   cd src
-   python app.py
-   ```
-5. Acesse em **http://127.0.0.1:5000**
-
----
-
-### 👤 Credenciais de Teste
-
-| E-mail               | Senha     | Perfil    |
-|----------------------|-----------|-----------|
-| admin@bodies.com     | senha123  | admin     |
-| carlos@bodies.com    | senha123  | barbeiro  |
-
----
-
-## 📄 Regras de Negócio e Consultas Complexas
-
-O sistema realiza consultas complexas para exibir dados integrados das tabelas:
-
-- **INNER JOIN:** Lista agendamentos com nome do cliente, barbeiro e serviço (apenas agendamentos com todos os vínculos válidos).
-- **LEFT JOIN:** Lista todos os barbeiros e clientes com o total de agendamentos (inclui quem não possui nenhum agendamento).
+👉 ![Vídeo](./docs/BODIES_BARBER2.mp4)
 
 ---
 
 ## 👤 Autor
 
-- **João Eduardo** — [@JeytheJo](https://github.com/JeytheJo)
-- Centro Universitário Santo Agostinho (UNIFSA)
-- Disciplina: Banco de Dados — Prof. Anderson Costa — [andersoncosta@unifsa.com.br](mailto:andersoncosta@unifsa.com.br)
+**João Eduardo** — [@JeytheJo](https://github.com/JeytheJo)  
+Centro Universitário Santo Agostinho — UNIFSA  
+Disciplina: Banco de Dados — Prof. Anderson Costa

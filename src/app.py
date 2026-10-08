@@ -73,9 +73,7 @@ def cadastro():
     return render_template("cadastro.html", erro=erro, sucesso=sucesso)
 
 
-# ──────────────────────────────────────────────
-# DASHBOARD
-# ──────────────────────────────────────────────
+
 
 @app.route("/dashboard")
 def dashboard():
@@ -86,9 +84,6 @@ def dashboard():
                            perfil=session.get("usuario_perfil"))
 
 
-# ──────────────────────────────────────────────
-# AGENDAMENTOS  (usa PROCEDURE para confirmar)
-# ──────────────────────────────────────────────
 
 @app.route("/agendamentos")
 def agendamentos():
@@ -158,7 +153,6 @@ def agendamento_status(id):
     novo_status = request.form["status"]
 
     if novo_status == "confirmado":
-        # ✅ Chama a PROCEDURE criada no banco
         query("CALL sp_confirmar_agendamento(%s)", (id,))
     else:
         query(
@@ -175,10 +169,6 @@ def agendamento_deletar(id):
     query("DELETE FROM agendamentos WHERE id = %s", (id,))
     return redirect(url_for("agendamentos"))
 
-
-# ──────────────────────────────────────────────
-# RELATÓRIO  (usa a VIEW vw_agendamentos_completos)
-# ──────────────────────────────────────────────
 
 @app.route("/relatorio")
 def relatorio():
