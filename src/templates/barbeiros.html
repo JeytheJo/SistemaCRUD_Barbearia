@@ -5,64 +5,96 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Bodies Barber — Barbeiros</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
+  <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='favicon.svg') }}"/>
 </head>
 <body class="dash-page">
+
   <div class="dither-bg"></div>
+
   <header class="dash-header">
-    <div class="brand">
-      <h1 class="brand-title">Bodies</h1>
-      <span class="brand-sub">Barber</span>
-    </div>
+    <a href="/dashboard" class="brand" style="text-decoration:none;">
+      <span class="brand-title" style="font-size:2rem;">Bodies</span>
+      <span class="brand-sub" style="letter-spacing:4px;">Barber</span>
+    </a>
     <div class="dash-user">
-      <span class="dash-user-nome">{{ session["usuario_nome"] }}</span>
-      <a href="/dashboard" class="dash-logout">VOLTAR</a>
-      <a href="/logout" class="dash-logout">SAIR</a>
+      <span class="dash-user-nome">{{ nome }}</span>
+      <a class="dash-logout" href="/logout">SAIR</a>
     </div>
   </header>
-  <main class="dash-main">
-    <h2 class="dash-title">BARBEIROS</h2>
 
+  <main class="dash-main">
+
+    <!-- TÍTULO + LABEL -->
+    <div style="display:flex; align-items:baseline; gap:16px; margin-bottom:40px;">
+      <h1 class="dash-title" style="margin-bottom:0;">BARBEIROS</h1>
+      <span style="font-size:0.6rem; letter-spacing:3px; color:var(--verm-acento); border:1px solid var(--verm-escuro); padding:2px 8px;">
+        FUNCTION — fn_faturamento_barbeiro
+      </span>
+    </div>
+
+    <!-- CADASTRO -->
+    {% if perfil == 'admin' %}
     <section class="crud-section">
-      <h3 class="crud-section-title">NOVO BARBEIRO</h3>
-      <form method="POST" action="/barbeiros/novo" class="crud-form">
+      <h2 class="crud-section-title">CADASTRAR BARBEIRO</h2>
+      <form class="crud-form" method="POST" action="/barbeiros">
         <div class="form-row">
           <input class="auth-input" type="text" name="nome" placeholder="NOME COMPLETO" required/>
-          <input class="auth-input" type="email" name="email" placeholder="EMAIL" required/>
+          <input class="auth-input" type="email" name="email" placeholder="E-MAIL" required/>
         </div>
         <div class="form-row">
-          <input class="auth-input" type="text" name="telefone" placeholder="TELEFONE"/>
-          <input class="auth-input" type="password" name="senha" placeholder="SENHA" required/>
+          <input class="auth-input" type="text" name="telefone" placeholder="TELEFONE (OPCIONAL)"/>
+          <input class="auth-input" type="password" name="senha" placeholder="SENHA (PADRÃO: senha123)"/>
         </div>
-        <button class="auth-btn" type="submit">CADASTRAR</button>
+        <button class="auth-btn" type="submit" style="max-width:200px;">CADASTRAR</button>
       </form>
     </section>
+    {% endif %}
 
+    <!-- TABELA COM FATURAMENTO -->
     <section class="crud-section">
-      <h3 class="crud-section-title">EQUIPE</h3>
+      <h2 class="crud-section-title">LISTA DE BARBEIROS</h2>
+
       {% if barbeiros %}
       <table class="crud-table">
         <thead>
           <tr>
             <th>NOME</th>
-            <th>EMAIL</th>
+            <th>E-MAIL</th>
             <th>TELEFONE</th>
-            <th>ATENDIMENTOS</th>
+            <th>AGENDAMENTOS</th>
+            <th>
+              FATURAMENTO
+              <span style="font-size:0.55rem; color:var(--verm-acento); letter-spacing:1px;">
+                ƒ( )
+              </span>
+            </th>
+            {% if perfil == 'admin' %}
             <th>AÇÕES</th>
+            {% endif %}
           </tr>
         </thead>
         <tbody>
           {% for b in barbeiros %}
           <tr>
             <td>{{ b.nome }}</td>
-            <td>{{ b.email }}</td>
-            <td>{{ b.telefone or '—' }}</td>
+            <td style="color:var(--texto-muted);">{{ b.email }}</td>
+            <td style="color:var(--texto-muted);">{{ b.telefone or '—' }}</td>
             <td>{{ b.total_agendamentos }}</td>
             <td>
-              <form method="POST" action="/barbeiros/deletar/{{ b.id }}" class="inline-form">
-                <button class="btn-mini btn-danger" type="submit"
-                  onclick="return confirm('Deletar barbeiro?')">✕</button>
+              {% if b.faturamento and b.faturamento > 0 %}
+                <span style="color:#4caf50;">R$ {{ "%.2f"|format(b.faturamento) }}</span>
+              {% else %}
+                <span style="color:var(--texto-muted);">R$ 0,00</span>
+              {% endif %}
+            </td>
+            {% if perfil == 'admin' %}
+            <td>
+              <form class="inline-form" method="POST" action="/barbeiros/deletar/{{ b.id }}"
+                    onsubmit="return confirm('REMOVER {{ b.nome | upper }}?')">
+                <button class="btn-mini btn-danger" type="submit">REMOVER</button>
               </form>
             </td>
+            {% endif %}
           </tr>
           {% endfor %}
         </tbody>
@@ -71,6 +103,7 @@
         <p class="crud-vazio">NENHUM BARBEIRO CADASTRADO.</p>
       {% endif %}
     </section>
+
   </main>
 </body>
 </html>

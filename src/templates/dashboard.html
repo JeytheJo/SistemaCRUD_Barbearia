@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Bodies Barber — Dashboard</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
+  <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='favicon.svg') }}"/>
 </head>
 <body class="dash-page">
 
@@ -12,42 +13,48 @@
 
   <header class="dash-header">
     <div class="brand">
-      <h1 class="brand-title">Bodies</h1>
-      <span class="brand-sub">Barber</span>
+      <span class="brand-title" style="font-size:2rem;">Bodies</span>
+      <span class="brand-sub" style="letter-spacing:4px;">Barber</span>
     </div>
     <div class="dash-user">
-      <span class="dash-user-nome">{{ usuario }}</span>
-      <a href="/logout" class="dash-logout">SAIR</a>
+      <span class="dash-user-nome">{{ nome }}</span>
+      <a class="dash-logout" href="/logout">SAIR</a>
     </div>
   </header>
 
   <main class="dash-main">
-    <h2 class="dash-title">PAINEL DE CONTROLE</h2>
+    <h1 class="dash-title">PAINEL DE CONTROLE</h1>
 
     <div class="dash-grid">
 
-      <a href="/agendamentos" class="dash-card">
-        <span class="dash-card-icon">▣</span>
-        <span class="dash-card-label">AGENDAMENTOS</span>
-        <span class="dash-card-sub">Gerenciar agenda</span>
+      <a class="dash-card" href="/agendamentos">
+        <div class="dash-card-icon">◈</div>
+        <div class="dash-card-label">AGENDAMENTOS</div>
+        <div class="dash-card-sub">CRUD — INSERT / UPDATE / DELETE</div>
       </a>
 
-      <a href="/servicos" class="dash-card">
-        <span class="dash-card-icon">✦</span>
-        <span class="dash-card-label">SERVIÇOS</span>
-        <span class="dash-card-sub">Cortes e preços</span>
+      <a class="dash-card" href="/servicos">
+        <div class="dash-card-icon">✦</div>
+        <div class="dash-card-label">SERVIÇOS</div>
+        <div class="dash-card-sub">CRUD — GERENCIAR CATÁLOGO</div>
       </a>
 
-      <a href="/barbeiros" class="dash-card">
-        <span class="dash-card-icon">◈</span>
-        <span class="dash-card-label">BARBEIROS</span>
-        <span class="dash-card-sub">Equipe</span>
+      <a class="dash-card" href="/barbeiros">
+        <div class="dash-card-icon">⊕</div>
+        <div class="dash-card-label">BARBEIROS</div>
+        <div class="dash-card-sub">LEFT JOIN + FUNCTION</div>
       </a>
 
-      <a href="/clientes" class="dash-card">
-        <span class="dash-card-icon">◉</span>
-        <span class="dash-card-label">CLIENTES</span>
-        <span class="dash-card-sub">Base de clientes</span>
+      <a class="dash-card" href="/clientes">
+        <div class="dash-card-icon">◉</div>
+        <div class="dash-card-label">CLIENTES</div>
+        <div class="dash-card-sub">LEFT JOIN — TOTAL AGENDAMENTOS</div>
+      </a>
+
+      <a class="dash-card" href="/relatorio" style="grid-column: 1 / -1; border-color: var(--verm-escuro);">
+        <div class="dash-card-icon" style="color:#cc6600;">⬡</div>
+        <div class="dash-card-label">RELATÓRIO GERAL</div>
+        <div class="dash-card-sub">VIEW — vw_agendamentos_completos + PROCEDURE + FUNCTION</div>
       </a>
 
     </div>

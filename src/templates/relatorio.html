@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Bodies Barber — Relatório</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
+  <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='favicon.svg') }}"/>
+</head>
+<body class="dash-page">
+
+  <div class="dither-bg"></div>
+
+  <header class="dash-header">
+    <a href="/dashboard" class="brand" style="text-decoration:none;">
+      <span class="brand-title" style="font-size:2rem;">Bodies</span>
+      <span class="brand-sub" style="letter-spacing:4px;">Barber</span>
+    </a>
+    <div class="dash-user">
+      <span class="dash-user-nome">{{ nome }}</span>
+      <a class="dash-logout" href="/logout">SAIR</a>
+    </div>
+  </header>
+
+  <main class="dash-main">
+
+    <!-- TÍTULO + LABEL VIEW -->
+    <div style="display:flex; align-items:baseline; gap:16px; margin-bottom:40px;">
+      <h1 class="dash-title" style="margin-bottom:0;">RELATÓRIO GERAL</h1>
+      <span style="font-size:0.6rem; letter-spacing:3px; color:var(--verm-acento); border:1px solid var(--verm-escuro); padding:2px 8px;">
+        VIEW — vw_agendamentos_completos
+      </span>
+    </div>
+
+    <!-- TOTALIZADORES POR STATUS -->
+    {% if totais %}
+    <section class="crud-section" style="margin-bottom:40px;">
+      <h2 class="crud-section-title">RESUMO POR STATUS</h2>
+      <div style="display:flex; gap:2px; flex-wrap:wrap; max-width:800px;">
+        {% for t in totais %}
+        <div style="background:#0f0f0f; border:1px solid var(--borda); padding:20px 28px; min-width:160px;">
+          <div class="status-badge status-{{ t.status }}" style="font-size:0.65rem; margin-bottom:8px;">
+            {{ t.status | upper }}
+          </div>
+          <div style="font-size:1.4rem; letter-spacing:2px; color:var(--texto);">{{ t.qtd }}</div>
+          <div style="font-size:0.65rem; letter-spacing:2px; color:var(--texto-muted); margin-top:4px;">
+            agendamentos
+          </div>
+          <div style="font-size:0.75rem; color:var(--texto); margin-top:8px;">
+            R$ {{ "%.2f"|format(t.total) }}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </section>
+    {% endif %}
+
+    <!-- FILTROS -->
+    <section class="crud-section">
+      <h2 class="crud-section-title">FILTROS</h2>
+      <form method="GET" action="/relatorio">
+        <div class="filter-row">
+          <select class="auth-input filter-input" name="status">
+            <option value="">TODOS OS STATUS</option>
+            {% for s in ["pendente","confirmado","concluido","cancelado"] %}
+            <option value="{{ s }}" {% if filtro_status == s %}selected{% endif %}>
+              {{ s | upper }}
+            </option>
+            {% endfor %}
+          </select>
+          <select class="auth-input filter-input" name="barbeiro_id">
+            <option value="">TODOS OS BARBEIROS</option>
+            {% for b in barbeiros %}
+            <option value="{{ b.id }}" {% if filtro_barbeiro == b.id|string %}selected{% endif %}>
+              {{ b.nome | upper }}
+            </option>
+            {% endfor %}
+          </select>
+        </div>
+        <button class="auth-btn" type="submit" style="max-width:200px; margin-top:12px;">
+          FILTRAR
+        </button>
+      </form>
+    </section>
+
+    <!-- TABELA DA VIEW -->
+    <section class="crud-section">
+      <h2 class="crud-section-title">
+        REGISTROS DA VIEW
+        <span style="color:var(--texto-muted); font-size:0.6rem; margin-left:12px;">
+          {{ registros|length }} resultado(s)
+        </span>
+      </h2>
+
+      {% if registros %}
+      <div style="overflow-x:auto;">
+        <table class="crud-table">
+          <thead>
+            <tr>
+              <th>DATA / HORA</th>
+              <th>CLIENTE</th>
+              <th>BARBEIRO</th>
+              <th>SERVIÇO</th>
+              <th>PREÇO</th>
+              <th>DURAÇÃO</th>
+              <th>STATUS</th>
+              <th>OBS.</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for r in registros %}
+            <tr>
+              <td>{{ r.data_hora.strftime('%d/%m/%Y %H:%M') if r.data_hora else '—' }}</td>
+              <td>
+                {{ r.cliente }}<br>
+                <span style="font-size:0.65rem; color:var(--texto-muted);">
+                  {{ r.cliente_telefone or '' }}
+                </span>
+              </td>
+              <td>{{ r.barbeiro }}</td>
+              <td>{{ r.servico }}</td>
+              <td>R$ {{ "%.2f"|format(r.preco) }}</td>
+              <td>{{ r.duracao_min }} min</td>
+              <td>
+                <span class="status-badge status-{{ r.status }}">
+                  {{ r.status | upper }}
+                </span>
+              </td>
+              <td style="color:var(--texto-muted); font-size:0.7rem;">
+                {{ r.observacoes or '—' }}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+        <p class="crud-vazio">NENHUM REGISTRO ENCONTRADO.</p>
+      {% endif %}
+    </section>
+
+  </main>
+</body>
+</html>
