@@ -13,10 +13,8 @@ def hash_senha(senha):
 def usuario_logado():
     return session.get("usuario_id")
 
-
-# ──────────────────────────────────────────────
 # AUTH
-# ──────────────────────────────────────────────
+
 
 @app.route("/")
 def index():
@@ -258,9 +256,8 @@ def servico_deletar(id):
     return redirect(url_for("servicos"))
 
 
-# ──────────────────────────────────────────────
+
 # BARBEIROS  (usa FUNCTION fn_faturamento_barbeiro)
-# ──────────────────────────────────────────────
 
 @app.route("/barbeiros", methods=["GET", "POST"])
 def barbeiros():
@@ -278,7 +275,7 @@ def barbeiros():
         )
         return redirect(url_for("barbeiros"))
 
-    # LEFT JOIN: inclui barbeiros sem agendamento
+    #LEFT JOIN: inclui barbeiros sem agendamento
     lista_raw = query("""
         SELECT b.id, b.nome, b.email, b.telefone,
                COUNT(a.id) AS total_agendamentos
@@ -289,7 +286,6 @@ def barbeiros():
         ORDER BY b.nome
     """, fetch="all") or []
 
-    # ✅ Chama a FUNCTION para cada barbeiro
     barbeiros_com_fat = []
     for b in lista_raw:
         fat = query(
@@ -315,8 +311,6 @@ def barbeiro_deletar(id):
     query("DELETE FROM usuarios WHERE id = %s AND role = 'barbeiro'", (id,))
     return redirect(url_for("barbeiros"))
 
-
-# ──────────────────────────────────────────────
 # CLIENTES
 # ──────────────────────────────────────────────
 

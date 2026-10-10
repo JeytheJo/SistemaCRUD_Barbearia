@@ -6,7 +6,30 @@ Demonstra integração Python + PostgreSQL com operações CRUD, consultas com J
 
 ---
 
+## 🌐 Acesso Online
+
+> **O sistema está publicado e pode ser acessado diretamente pelo navegador, sem instalação.**
+
+[![Acessar o Sistema](https://img.shields.io/badge/🚀%20Acessar%20o%20Sistema-bodies--barber.onrender.com-4f46e5?style=for-the-badge)](https://sistemacrud-barbearia.onrender.com)
+
+### 🔑 Credenciais de Teste
+
+| E-mail | Senha | Perfil |
+|---|---|---|
+| admin@bodies.com | senha123 | admin |
+| carlos@bodies.com | senha123 | barbeiro |
+
+> ⚠️ O serviço está hospedado no plano gratuito do Render — pode demorar ~30s para carregar na primeira visita (cold start).
+
+---
+
 ## 🛠️ Tecnologias
+
+![Python](https://img.shields.io/badge/Python-3776AB?style=flat&logo=python&logoColor=white)
+![Flask](https://img.shields.io/badge/Flask-000000?style=flat&logo=flask&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=flat&logo=postgresql&logoColor=white)
+![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=flat&logo=supabase&logoColor=white)
+![Render](https://img.shields.io/badge/Render-46E3B7?style=flat&logo=render&logoColor=white)
 
 | Camada | Tecnologia |
 |---|---|
@@ -14,6 +37,7 @@ Demonstra integração Python + PostgreSQL com operações CRUD, consultas com J
 | Banco de dados | PostgreSQL 17 (Supabase) |
 | Driver | psycopg2 |
 | Interface | Web (Flask + HTML/CSS) |
+| Deploy | Render (gunicorn) |
 
 ---
 
@@ -64,7 +88,7 @@ CALL sp_confirmar_agendamento('<uuid do agendamento>');
 
 ---
 
-## 🚀 Como Executar (sem Docker)
+## 🚀 Como Executar Localmente (sem Docker)
 
 **Pré-requisitos:** Python 3.10 ou superior instalado.
 
@@ -110,15 +134,6 @@ http://127.0.0.1:5000
 
 ---
 
-## 🔑 Credenciais de Teste
-
-| E-mail | Senha | Perfil |
-|---|---|---|
-| admin@bodies.com | senha123 | admin |
-| carlos@bodies.com | senha123 | barbeiro |
-
----
-
 ## 📸 Telas do Sistema
 
 ### Login
@@ -140,7 +155,7 @@ http://127.0.0.1:5000
 
 ## 📺 Vídeo Demonstrativo
 
-👉 ![Vídeo](./docs/BODIES_BARBER2.mp4)
+👉 ![Vídeo](./docs/BODIES_BARBER2)
 
 ---
 
