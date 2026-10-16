@@ -95,45 +95,47 @@
 
       {% if registros %}
       <div style="overflow-x:auto;">
-        <table class="crud-table">
-          <thead>
-            <tr>
-              <th>DATA / HORA</th>
-              <th>CLIENTE</th>
-              <th>BARBEIRO</th>
-              <th>SERVIÇO</th>
-              <th>PREÇO</th>
-              <th>DURAÇÃO</th>
-              <th>STATUS</th>
-              <th>OBS.</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for r in registros %}
-            <tr>
-              <td>{{ r.data_hora.strftime('%d/%m/%Y %H:%M') if r.data_hora else '—' }}</td>
-              <td>
-                {{ r.cliente }}<br>
-                <span style="font-size:0.65rem; color:var(--texto-muted);">
-                  {{ r.cliente_telefone or '' }}
-                </span>
-              </td>
-              <td>{{ r.barbeiro }}</td>
-              <td>{{ r.servico }}</td>
-              <td>R$ {{ "%.2f"|format(r.preco) }}</td>
-              <td>{{ r.duracao_min }} min</td>
-              <td>
-                <span class="status-badge status-{{ r.status }}">
-                  {{ r.status | upper }}
-                </span>
-              </td>
-              <td style="color:var(--texto-muted); font-size:0.7rem;">
-                {{ r.observacoes or '—' }}
-              </td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+        <div class="table-wrapper">
+          <table class="crud-table">
+            <thead>
+              <tr>
+                <th>DATA / HORA</th>
+                <th>CLIENTE</th>
+                <th>BARBEIRO</th>
+                <th>SERVIÇO</th>
+                <th>PREÇO</th>
+                <th>DURAÇÃO</th>
+                <th>STATUS</th>
+                <th>OBS.</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for r in registros %}
+              <tr>
+                <td>{{ r.data_hora.strftime('%d/%m/%Y %H:%M') if r.data_hora else '—' }}</td>
+                <td>
+                  {{ r.cliente }}<br>
+                  <span style="font-size:0.65rem; color:var(--texto-muted);">
+                    {{ r.cliente_telefone or '' }}
+                  </span>
+                </td>
+                <td>{{ r.barbeiro }}</td>
+                <td>{{ r.servico }}</td>
+                <td>R$ {{ "%.2f"|format(r.preco) }}</td>
+                <td>{{ r.duracao_min }} min</td>
+                <td>
+                  <span class="status-badge status-{{ r.status }}">
+                    {{ r.status | upper }}
+                  </span>
+                </td>
+                <td style="color:var(--texto-muted); font-size:0.7rem;">
+                  {{ r.observacoes or '—' }}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
       </div>
       {% else %}
         <p class="crud-vazio">NENHUM REGISTRO ENCONTRADO.</p>

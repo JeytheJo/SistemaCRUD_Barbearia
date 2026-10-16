@@ -155,7 +155,7 @@ http://127.0.0.1:5000
 
 ## 📺 Vídeo Demonstrativo
 
-👉 ![Vídeo](./docs/BODIES_BARBER2)
+👉 ![Vídeo](./docs/BODIES_BARBER2.mp4)
 
 ---
 
@@ -164,3 +164,5 @@ http://127.0.0.1:5000
 **João Eduardo** — [@JeytheJo](https://github.com/JeytheJo)  
 Centro Universitário Santo Agostinho — UNIFSA  
 Disciplina: Banco de Dados — Prof. Anderson Costa
+
+### Logo irá sair uma versão otimizada para dispositivos Mobile

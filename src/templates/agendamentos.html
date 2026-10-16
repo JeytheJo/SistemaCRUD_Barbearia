@@ -87,50 +87,52 @@
     <section class="crud-section">
       <h3 class="crud-section-title">REGISTROS</h3>
       {% if agendamentos %}
-      <table class="crud-table" id="tabela-agendamentos">
-        <thead>
-          <tr>
-            <th>CLIENTE</th>
-            <th>BARBEIRO</th>
-            <th>SERVIÇO</th>
-            <th>DATA/HORA</th>
-            <th>STATUS</th>
-            <th>AÇÕES</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for a in agendamentos %}
-          <tr data-cliente="{{ a.cliente_nome }}" data-status="{{ a.status }}">
-            <td>{{ a.cliente_nome }}</td>
-            <td>{{ a.barbeiro_nome }}</td>
-            <td>{{ a.servico_nome }}</td>
-            <td>{{ a.data_hora.strftime('%d/%m/%Y %H:%M') }}</td>
-            <td>
-              <span class="status-badge status-{{ a.status }}">
-                {{ a.status.upper() }}
-              </span>
-            </td>
-            <td class="acoes">
-              <!-- Atualizar status -->
-              <form method="POST" action="/agendamentos/status/{{ a.id }}" class="inline-form">
-                <select class="input-mini" name="status">
-                  <option value="pendente">PENDENTE</option>
-                  <option value="confirmado">CONFIRMADO</option>
-                  <option value="concluido">CONCLUÍDO</option>
-                  <option value="cancelado">CANCELADO</option>
-                </select>
-                <button class="btn-mini btn-confirm" type="submit">✓</button>
-              </form>
-              <!-- Deletar -->
-              <form method="POST" action="/agendamentos/deletar/{{ a.id }}" class="inline-form">
-                <button class="btn-mini btn-danger" type="submit"
-                  onclick="return confirm('Deletar agendamento?')">✕</button>
-              </form>
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+      <div class="table-wrapper">
+        <table class="crud-table" id="tabela-agendamentos">
+          <thead>
+            <tr>
+              <th>CLIENTE</th>
+              <th>BARBEIRO</th>
+              <th>SERVIÇO</th>
+              <th>DATA/HORA</th>
+              <th>STATUS</th>
+              <th>AÇÕES</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for a in agendamentos %}
+            <tr data-cliente="{{ a.cliente_nome }}" data-status="{{ a.status }}">
+              <td>{{ a.cliente_nome }}</td>
+              <td>{{ a.barbeiro_nome }}</td>
+              <td>{{ a.servico_nome }}</td>
+              <td>{{ a.data_hora.strftime('%d/%m/%Y %H:%M') }}</td>
+              <td>
+                <span class="status-badge status-{{ a.status }}">
+                  {{ a.status.upper() }}
+                </span>
+              </td>
+              <td class="acoes">
+                <!-- Atualizar status -->
+                <form method="POST" action="/agendamentos/status/{{ a.id }}" class="inline-form">
+                  <select class="input-mini" name="status">
+                    <option value="pendente">PENDENTE</option>
+                    <option value="confirmado">CONFIRMADO</option>
+                    <option value="concluido">CONCLUÍDO</option>
+                    <option value="cancelado">CANCELADO</option>
+                  </select>
+                  <button class="btn-mini btn-confirm" type="submit">✓</button>
+                </form>
+                <!-- Deletar -->
+                <form method="POST" action="/agendamentos/deletar/{{ a.id }}" class="inline-form">
+                  <button class="btn-mini btn-danger" type="submit"
+                    onclick="return confirm('Deletar agendamento?')">✕</button>
+                </form>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
       {% else %}
         <p class="crud-vazio">NENHUM AGENDAMENTO CADASTRADO.</p>
       {% endif %}

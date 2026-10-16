@@ -25,33 +25,37 @@
     <section class="crud-section">
       <h3 class="crud-section-title">BASE DE CLIENTES</h3>
       {% if clientes %}
-      <table class="crud-table">
-        <thead>
-          <tr>
-            <th>NOME</th>
-            <th>EMAIL</th>
-            <th>TELEFONE</th>
-            <th>AGENDAMENTOS</th>
-            <th>AÇÕES</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for c in clientes %}
-          <tr>
-            <td>{{ c.nome }}</td>
-            <td>{{ c.email }}</td>
-            <td>{{ c.telefone or '—' }}</td>
-            <td>{{ c.total_agendamentos }}</td>
-            <td>
-              <form method="POST" action="/clientes/deletar/{{ c.id }}" class="inline-form">
-                <button class="btn-mini btn-danger" type="submit"
-                  onclick="return confirm('Deletar cliente?')">✕</button>
-              </form>
-            </td>
-          </tr>
-          {% endfor %}s
-        </tbody>
-      </table>
+      <div class="table-wrapper">
+        <div class="table-wrapper">
+          <table class="crud-table">
+            <thead>
+              <tr>
+                <th>NOME</th>
+                <th>EMAIL</th>
+                <th>TELEFONE</th>
+                <th>AGENDAMENTOS</th>
+                <th>AÇÕES</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for c in clientes %}
+              <tr>
+                <td>{{ c.nome }}</td>
+                <td>{{ c.email }}</td>
+                <td>{{ c.telefone or '—' }}</td>
+                <td>{{ c.total_agendamentos }}</td>
+                <td>
+                  <form method="POST" action="/clientes/deletar/{{ c.id }}" class="inline-form">
+                    <button class="btn-mini btn-danger" type="submit"
+                      onclick="return confirm('Deletar cliente?')">✕</button>
+                  </form>
+                </td>
+              </tr>
+              {% endfor %}s
+            </tbody>
+          </table>
+        </div>
+      </div>
       {% else %}
         <p class="crud-vazio">NENHUM CLIENTE CADASTRADO.</p>
       {% endif %}
