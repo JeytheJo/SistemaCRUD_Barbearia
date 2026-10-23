@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, session, url_for
 from database import query
+from cache import cache_get, cache_set, cache_delete
 import hashlib
 
 app = Flask(__name__)
@@ -9,12 +10,8 @@ app.secret_key = "bodies_barber_secret"
 def hash_senha(senha):
     return hashlib.sha256(senha.encode()).hexdigest()
 
-
 def usuario_logado():
     return session.get("usuario_id")
-
-# AUTH
-
 
 @app.route("/")
 def index():
@@ -136,6 +133,8 @@ def agendamento_novo():
          request.form["servico_id"], request.form["data_hora"],
          request.form.get("observacoes", ""))
     )
+    # Novo agendamento afeta faturamento e relatório
+    cache_delete("barbeiros_lista", "relatorio_totais")
     return redirect(url_for("agendamentos"))
 
 
@@ -157,6 +156,8 @@ def agendamento_status(id):
             "UPDATE agendamentos SET status = %s WHERE id = %s",
             (novo_status, id)
         )
+    # Mudança de status (ex: concluido) altera faturamento e relatório
+    cache_delete("barbeiros_lista", "relatorio_totais")
     return redirect(url_for("agendamentos"))
 
 
@@ -165,6 +166,8 @@ def agendamento_deletar(id):
     if not usuario_logado():
         return redirect(url_for("login"))
     query("DELETE FROM agendamentos WHERE id = %s", (id,))
+    # Deleção afeta contagens e faturamento
+    cache_delete("barbeiros_lista", "relatorio_totais")
     return redirect(url_for("agendamentos"))
 
 
@@ -172,7 +175,7 @@ def agendamento_deletar(id):
 def relatorio():
     """
     Demonstra o uso da VIEW vw_agendamentos_completos.
-    Consulta simples na view — sem JOINs manuais no Python.
+    Totalizadores são cacheados (sem filtro) para evitar recálculo a cada acesso.
     """
     if not usuario_logado():
         return redirect(url_for("login"))
@@ -193,13 +196,16 @@ def relatorio():
     registros = query(sql, params, fetch="all") or []
     barbeiros = query("SELECT id, nome FROM usuarios WHERE role = 'barbeiro' ORDER BY nome", fetch="all") or []
 
-    # Totalizador por status (para exibir resumo)
-    totais = query("""
-        SELECT status, COUNT(*) AS qtd, COALESCE(SUM(preco), 0) AS total
-        FROM vw_agendamentos_completos
-        GROUP BY status
-        ORDER BY status
-    """, fetch="all") or []
+    # Totalizadores: cacheados por 5 minutos (não dependem de filtros)
+    totais = cache_get("relatorio_totais")
+    if totais is None:
+        totais = query("""
+            SELECT status, COUNT(*) AS qtd, COALESCE(SUM(preco), 0) AS total
+            FROM vw_agendamentos_completos
+            GROUP BY status
+            ORDER BY status
+        """, fetch="all") or []
+        cache_set("relatorio_totais", totais, ttl=300)
 
     return render_template("relatorio.html",
                            registros=registros,
@@ -273,30 +279,38 @@ def barbeiros():
             "INSERT INTO usuarios (nome, email, telefone, senha_hash, role) VALUES (%s, %s, %s, %s, 'barbeiro')",
             (nome, email, telefone, senha)
         )
+        # Novo barbeiro invalida cache da lista
+        cache_delete("barbeiros_lista")
         return redirect(url_for("barbeiros"))
 
-    #LEFT JOIN: inclui barbeiros sem agendamento
-    lista_raw = query("""
-        SELECT b.id, b.nome, b.email, b.telefone,
-               COUNT(a.id) AS total_agendamentos
-        FROM usuarios b
-        LEFT JOIN agendamentos a ON a.barbeiro_id = b.id
-        WHERE b.role = 'barbeiro'
-        GROUP BY b.id, b.nome, b.email, b.telefone
-        ORDER BY b.nome
-    """, fetch="all") or []
+    # Tenta buscar do cache (evita N+1 queries ao banco)
+    barbeiros_com_fat = cache_get("barbeiros_lista")
 
-    barbeiros_com_fat = []
-    for b in lista_raw:
-        fat = query(
-            "SELECT fn_faturamento_barbeiro(%s) AS faturamento",
-            (str(b["id"]),),
-            fetch="one"
-        )
-        barbeiros_com_fat.append({
-            **b,
-            "faturamento": fat["faturamento"] if fat else 0
-        })
+    if barbeiros_com_fat is None:
+        lista_raw = query("""
+            SELECT b.id, b.nome, b.email, b.telefone,
+                   COUNT(a.id) AS total_agendamentos
+            FROM usuarios b
+            LEFT JOIN agendamentos a ON a.barbeiro_id = b.id
+            WHERE b.role = 'barbeiro'
+            GROUP BY b.id, b.nome, b.email, b.telefone
+            ORDER BY b.nome
+        """, fetch="all") or []
+
+        barbeiros_com_fat = []
+        for b in lista_raw:
+            fat = query(
+                "SELECT fn_faturamento_barbeiro(%s) AS faturamento",
+                (str(b["id"]),),
+                fetch="one"
+            )
+            barbeiros_com_fat.append({
+                **b,
+                "faturamento": fat["faturamento"] if fat else 0
+            })
+
+        # Cacheia por 5 minutos
+        cache_set("barbeiros_lista", barbeiros_com_fat, ttl=300)
 
     return render_template("barbeiros.html",
                            barbeiros=barbeiros_com_fat,
@@ -309,6 +323,8 @@ def barbeiro_deletar(id):
     if not usuario_logado():
         return redirect(url_for("login"))
     query("DELETE FROM usuarios WHERE id = %s AND role = 'barbeiro'", (id,))
+    # Remove cache da lista ao deletar barbeiro
+    cache_delete("barbeiros_lista")
     return redirect(url_for("barbeiros"))
 
 # CLIENTES
