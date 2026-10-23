@@ -30,12 +30,14 @@ Demonstra integração Python + PostgreSQL com operações CRUD, consultas com J
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=flat&logo=postgresql&logoColor=white)
 ![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=flat&logo=supabase&logoColor=white)
 ![Render](https://img.shields.io/badge/Render-46E3B7?style=flat&logo=render&logoColor=white)
+![Redis](https://img.shields.io/badge/Redis-DC382D?style=flat&logo=redis&logoColor=white)
 
 | Camada | Tecnologia |
 |---|---|
 | Backend | Python 3 + Flask |
 | Banco de dados | PostgreSQL 17 (Supabase) |
 | Driver | psycopg2 |
+| Cache | Redis (Render Key Value) |
 | Interface | Web (Flask + HTML/CSS) |
 | Deploy | Render (gunicorn) |
 
@@ -60,6 +62,20 @@ SistemaCRUD_Barbearia/
     ├── templates/
     └── static/
 ```
+
+---
+
+## ⚡ Cache com Redis
+
+O sistema utiliza **Redis** (Render Key Value) para reduzir a carga no banco de dados nas rotas mais custosas.
+
+| Chave | Rota cacheada | TTL |
+|---|---|---|
+| `barbeiros_lista` | `GET /barbeiros` — lista com faturamento via `fn_faturamento_barbeiro` | 5 min |
+| `relatorio_totais` | `GET /relatorio` — totalizadores por status da VIEW | 5 min |
+
+O cache é invalidado automaticamente sempre que um agendamento é criado, atualizado ou deletado.
+Se o Redis estiver indisponível, o sistema continua funcionando normalmente (fallback direto ao banco).
 
 ---
 
@@ -164,5 +180,3 @@ http://127.0.0.1:5000
 **João Eduardo** — [@JeytheJo](https://github.com/JeytheJo)  
 Centro Universitário Santo Agostinho — UNIFSA  
 Disciplina: Banco de Dados — Prof. Anderson Costa
-
-### Logo irá sair uma versão otimizada para dispositivos Mobile
