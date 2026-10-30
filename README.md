@@ -2,7 +2,7 @@
 
 Projeto prático da disciplina de **Banco de Dados (2ª Nota)** — Centro Universitário Santo Agostinho (UNIFSA).
 
-Demonstra integração Python + PostgreSQL com operações CRUD, consultas com JOIN, além de **VIEW**, **FUNCTION** e **PROCEDURE** implementadas no banco.
+Sistema web de agendamento para barbearia que demonstra integração completa com **Supabase** (PostgreSQL na nuvem) e **Redis** (cache), além de operações CRUD, consultas com JOIN, **VIEW**, **FUNCTION** e **PROCEDURE** implementadas no banco.
 
 ---
 
@@ -10,7 +10,7 @@ Demonstra integração Python + PostgreSQL com operações CRUD, consultas com J
 
 > **O sistema está publicado e pode ser acessado diretamente pelo navegador, sem instalação.**
 
-[![Acessar o Sistema](https://img.shields.io/badge/🚀%20Acessar%20o%20Sistema-bodies--barber.onrender.com-4f46e5?style=for-the-badge)](https://sistemacrud-barbearia.onrender.com)
+[![Acessar o Sistema](https://img.shields.io/badge/🚀%20Acessar%20o%20Sistema-sistemacrud--barbearia.onrender.com-4f46e5?style=for-the-badge)](https://sistemacrud-barbearia.onrender.com)
 
 ### 🔑 Credenciais de Teste
 
@@ -20,6 +20,20 @@ Demonstra integração Python + PostgreSQL com operações CRUD, consultas com J
 | carlos@bodies.com | senha123 | barbeiro |
 
 > ⚠️ O serviço está hospedado no plano gratuito do Render — pode demorar ~30s para carregar na primeira visita (cold start).
+
+---
+
+## 🎯 Objetivo e Funcionalidades
+
+O sistema resolve o problema de gerenciamento manual de agendamentos em barbearias. Clientes precisam ligar ou ir presencialmente para marcar horários, e o barbeiro não tem visibilidade em tempo real da sua agenda e do seu faturamento.
+
+**Funcionalidades implementadas:**
+- Autenticação com três perfis: admin, barbeiro e cliente
+- CRUD completo de agendamentos, barbeiros, clientes e serviços
+- Confirmação de agendamentos via **PROCEDURE** no banco (`sp_confirmar_agendamento`)
+- Relatório de agendamentos usando **VIEW** consolidada (`vw_agendamentos_completos`)
+- Faturamento por barbeiro usando **FUNCTION** no banco (`fn_faturamento_barbeiro`)
+- Cache de consultas custosas com **Redis** para melhorar a performance
 
 ---
 
@@ -57,6 +71,7 @@ SistemaCRUD_Barbearia/
 ├── docs/            prints do sistema
 └── src/
     ├── app.py
+    ├── cache.py
     ├── database.py
     ├── requirements.txt
     ├── templates/
@@ -65,17 +80,49 @@ SistemaCRUD_Barbearia/
 
 ---
 
+## 🗃️ Integração com Supabase
+
+O Supabase é utilizado como banco de dados **PostgreSQL 17 hospedado na nuvem**. A conexão é feita via **Connection Pooler** (porta 6543) com `psycopg2`, o que permite múltiplas conexões simultâneas sem sobrecarregar o banco.
+
+**O que está implementado no Supabase:**
+
+| Objeto | Nome | Descrição |
+|---|---|---|
+| Tabelas | `usuarios`, `agendamentos`, `servicos` | Estrutura principal do sistema |
+| VIEW | `vw_agendamentos_completos` | Consolida dados de agendamento com JOIN entre 3 tabelas |
+| FUNCTION | `fn_faturamento_barbeiro(uuid)` | Calcula total faturado por barbeiro (status `concluido`) |
+| PROCEDURE | `sp_confirmar_agendamento(uuid)` | Confirma agendamentos pendentes com validação no banco |
+
+A VIEW é consultada na rota `/relatorio` para exibir todos os agendamentos com nome de cliente, barbeiro e serviço sem repetir JOINs no código Python. A FUNCTION é chamada individualmente para cada barbeiro na rota `/barbeiros`. A PROCEDURE substitui um UPDATE simples na confirmação de agendamentos, garantindo que apenas agendamentos com status `pendente` possam ser confirmados.
+
+---
+
 ## ⚡ Cache com Redis
 
-O sistema utiliza **Redis** (Render Key Value) para reduzir a carga no banco de dados nas rotas mais custosas.
+### Por que o Redis foi utilizado?
 
-| Chave | Rota cacheada | TTL |
-|---|---|---|
-| `barbeiros_lista` | `GET /barbeiros` — lista com faturamento via `fn_faturamento_barbeiro` | 5 min |
-| `relatorio_totais` | `GET /relatorio` — totalizadores por status da VIEW | 5 min |
+A rota `/barbeiros` tem um problema de **N+1 queries**: para cada barbeiro listado, o sistema precisa chamar a FUNCTION `fn_faturamento_barbeiro` no banco. Com 10 barbeiros, são 11 consultas a cada acesso à página. O Redis resolve esse problema guardando o resultado já processado por 5 minutos.
 
-O cache é invalidado automaticamente sempre que um agendamento é criado, atualizado ou deletado.
-Se o Redis estiver indisponível, o sistema continua funcionando normalmente (fallback direto ao banco).
+A rota `/relatorio` consulta a VIEW e ainda agrega totalizadores por status — uma operação que varre toda a tabela de agendamentos. Sem cache, esse custo é repetido a cada visita ao relatório.
+
+### Como foi implementado?
+
+O módulo `src/cache.py` encapsula a conexão com Redis e expõe três funções simples: `cache_get`, `cache_set` e `cache_delete`. Se o Redis estiver indisponível (variável `REDIS_URL` ausente ou serviço fora do ar), o sistema continua funcionando normalmente — o fallback vai direto ao banco.
+
+| Chave | Rota cacheada | TTL | Motivo |
+|---|---|---|---|
+| `barbeiros_lista` | `GET /barbeiros` | 5 min | Evita N+1 queries à FUNCTION por barbeiro |
+| `relatorio_totais` | `GET /relatorio` (totalizadores) | 5 min | Evita varredura completa da VIEW a cada acesso |
+
+**Invalidação automática:** sempre que um agendamento é criado, atualizado ou deletado, ambas as chaves são removidas do cache — garantindo que os dados exibidos reflitam o estado real do banco.
+
+```python
+# Exemplo de uso em app.py
+barbeiros_com_fat = cache_get("barbeiros_lista")
+if barbeiros_com_fat is None:
+    # ... consulta ao banco + chamadas à FUNCTION ...
+    cache_set("barbeiros_lista", barbeiros_com_fat, ttl=300)
+```
 
 ---
 
@@ -104,7 +151,7 @@ CALL sp_confirmar_agendamento('<uuid do agendamento>');
 
 ---
 
-## 🚀 Como Executar Localmente (sem Docker)
+## 🚀 Como Executar Localmente
 
 **Pré-requisitos:** Python 3.10 ou superior instalado.
 
@@ -116,12 +163,12 @@ cd SistemaCRUD_Barbearia
 
 ### 2. Instale as dependências
 ```bash
-pip install flask psycopg2-binary python-dotenv
+pip install flask psycopg2-binary python-dotenv gunicorn redis
 ```
 
-> No Linux/Fedora, se necessário: `pip install --break-system-packages flask psycopg2-binary python-dotenv`
+> No Linux/Fedora, se necessário: `pip install --break-system-packages flask psycopg2-binary python-dotenv gunicorn redis`
 
-### 3. Configure o banco de dados
+### 3. Configure as variáveis de ambiente
 
 Crie o arquivo `src/.env` com as credenciais do Supabase:
 
@@ -131,19 +178,23 @@ DB_PORT=5432
 DB_NAME=postgres
 DB_USER=postgres
 DB_PASSWORD=sua_senha_aqui
+
+# Opcional — o sistema funciona sem Redis (fallback direto ao banco)
+REDIS_URL=redis://localhost:6379
+
+# Opcional — chave de sessão Flask (padrão funciona para dev)
+SECRET_KEY=troque_por_uma_chave_forte_em_producao
 ```
 
-> As credenciais completas estão em: **Supabase → Settings → Database → Connection parameters**
+> As credenciais do banco estão em: **Supabase → Settings → Database → Connection parameters**
 
 ### 4. Execute
-
 ```bash
 cd src
 python app.py
 ```
 
 ### 5. Acesse no navegador
-
 ```
 http://127.0.0.1:5000
 ```
@@ -164,14 +215,15 @@ http://127.0.0.1:5000
 ### Relatório (VIEW)
 ![Relatório](./docs/relatorio.png)
 
-### Barbeiros (FUNCTION)
+### Barbeiros (FUNCTION + Cache Redis)
 ![Barbeiros](./docs/barbeiros.png)
 
 ---
 
 ## 📺 Vídeo Demonstrativo
 
-👉 ![Vídeo](./docs/BODIES_BARBER2.mp4)
+👉 [Link dos Vídeos](https://drive.google.com/drive/folders/16qDwOs1r1ixPjSzbXb0cB2LOPHd7gLlG?usp=sharing)
+
 
 ---
 
